@@ -986,7 +986,7 @@ public class Controller implements Initializable {
 
                     if (newSelection.getDateFlagged() != null) {
                         titleDateFlagged.setText(newSelection.getDateFlagged().toString());
-                        if (newSelection.getDateFlagged().isBefore(sixMonthsAgo) && newSelection.getDateCreated() == null && newSelection.getDateCreated().isBefore(sixMonthsAgo)) {
+                        if (newSelection.getDateFlagged().isBefore(sixMonthsAgo) && newSelection.getDateCreated() != null && newSelection.getDateCreated().isBefore(sixMonthsAgo)) {
                             titleDateFlaggedNoticeText.setVisible(true);
                         }
                         else {
@@ -3064,7 +3064,7 @@ public class Controller implements Initializable {
 
     /**
      * Adds all orders for a given set of Customers to the Orders table.
-     * @param customer The Customer to update the Order Table for
+     * @param customers The Customer to update the Order Table for
      */
     void updateOrdersTable(ObservableList<Customer> customers) {
         ObservableList<Order> allOrders = getOrderTable();
@@ -3143,7 +3143,7 @@ public class Controller implements Initializable {
 
     /**
      * Adds all orders for a given selection of titles to the Title Orders table.
-     * @param customer The Customer to update the Order Table for
+     * @param titles The title to update the Order Table for
      */
     void getTitleOrders(ObservableList<Title> titles)
     {
@@ -3350,4 +3350,34 @@ public class Controller implements Initializable {
         return titleTable.getSelectionModel().getSelectedItem();
     }
 
+    public ArrayList<Customer> getCustomerList()
+    {
+        ArrayList<Customer> customers = new ArrayList<Customer>();
+        Statement s = null;
+        try
+        {
+            s = conn.createStatement();
+            ResultSet results = s.executeQuery("select * from Customers ORDER BY LASTNAME");
+
+            while(results.next())
+            {
+                int customerId = results.getInt(1);
+                String firstName = results.getString(2);
+                String lastName = results.getString(3);
+                String phone = results.getString(4);
+                String email = results.getString(5);
+                String notes = results.getString(6);
+                boolean delinquent = results.getBoolean(7);
+                customers.add(new Customer(customerId, firstName, lastName, phone, email, notes, delinquent));
+            }
+            results.close();
+            s.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+
+        return customers;
+    }
 }

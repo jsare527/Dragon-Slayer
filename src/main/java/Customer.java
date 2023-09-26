@@ -174,4 +174,11 @@ public class Customer {
     {
         delinquent = customerSucks;
     }
+
+    public boolean equals(Customer c)
+    {
+        return this.firstName.equals(c.getFirstName()) && this.lastName.equals(c.getLastName())
+                && this.phone.equals(c.getPhone()) && this.email.equals(c.getEmail())
+                && this.notes.equals(c.getNotes());
+    }
 }
