@@ -1,5 +1,6 @@
 Feature: Customers
   Test functionality of customers tab
+  Note: This feature is meant to be run with an empty database
 
   Scenario: Create, Edit, and Delete One Customer
     Given I click on Customers tab
@@ -57,7 +58,7 @@ Feature: Customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
       | May          | Lee         |              |                   |          |
       | May          | Lee         |              |                   |          |
-    Then I should see and close error message: "Duplicate Customer Entry"
+    Then I should see and close message: "Duplicate Customer Entry"
     When I update add customer with phone: "402-818-9203"
     Then I should see customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
@@ -129,7 +130,7 @@ Feature: Customers
     When I add customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
       |              |             | 111-222-3333 | silly@yahoo.com   |          |
-    Then I should see and close error message: "No Name Entered"
+    Then I should see and close message: "No Name Entered"
     When I update add customer with full name: "John Carter"
     Then I should see customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
@@ -141,7 +142,3 @@ Feature: Customers
       | Mark         | Smith       | 402-222-2222 | mSmith@yahoo.com  |          |
     Then I should see customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
-
-Scenario: Create, Edit, and Delete Customer Order
-
-Scenario: Delete customer with active orders

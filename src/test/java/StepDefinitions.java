@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -15,11 +16,13 @@ import org.testfx.api.FxRobotException;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class StepDefinitions extends ApplicationTest {
@@ -164,14 +167,14 @@ public class StepDefinitions extends ApplicationTest {
         }
     }
 
-    @Then("I should see and close error message: {string}")
-    public void i_should_see_and_close_duplicate_customer_entry(String errorMessage)
+    @Then("I should see and close message: {string}")
+    public void i_should_see_and_close_message(String message)
     {
         List<Window> x = robotContext().getWindowFinder().listWindows();
         int pos = robotContext().getWindowFinder().listWindows().size();
         Window duplicate = robotContext().getWindowFinder().listWindows().get(pos - 1);
         Stage s = (Stage) duplicate;
-        assertEquals(errorMessage, s.getTitle());
+        assertEquals(message, s.getTitle());
         clickOn("OK");
     }
 
@@ -179,9 +182,26 @@ public class StepDefinitions extends ApplicationTest {
     public void i_should_only_see_customers(DataTable args)
     {
         List<Customer> customers = createCustomerList(args);
+        List<Customer> totalCustomers = controller.getCustomerList();
 
+        // Check expected result shows on application
         for(Customer c : customers) {
             clickOn(c.getLastName());
+        }
+
+        // Check other customers are not shown
+        for (Customer c : totalCustomers)
+        {
+            if (!customers.contains(c))
+            {
+                try {
+                    clickOn(c.getLastName());
+                }
+                catch (FxRobotException e)
+                {
+                    assertEquals("the query \"" + c.getLastName() + "\" returned no nodes.", e.getMessage());
+                }
+            }
         }
     }
 
@@ -209,6 +229,178 @@ public class StepDefinitions extends ApplicationTest {
 
     //#endregion
 
+    //#region Title Functions
+
+    @Given("I click on Titles tab")
+    public void i_click_on_titles_tab()
+    {
+        clickOn("Titles");
+    }
+
+    //#region Title Buttons and Inputs
+
+    @When("I add titles$")
+    public void i_add_titles(DataTable args)
+    {
+        List<Title> titles = createTitleList(args);
+
+        for (Title t : titles)
+        {
+            clickOn("#addTitleButtonMain");
+
+            clickOn("#newTitleTitle");
+            write(t.getTitle());
+            clickOn("#newTitleProductId");
+            write(t.getProductId());
+            clickOn("#newTitlePrice");
+            write(t.getPriceDollars());
+            clickOn("#newTitleNotes");
+            write(t.getNotes());
+
+            clickOn("#addTitleButton");
+        }
+    }
+
+    @When("I edit titles$")
+    public void i_edit_titles(DataTable args)
+    {
+        List<Title> titles = createTitleList(args);
+
+        for(Title t : titles)
+        {
+            clickOn(t.getTitle());
+            clickOn("#editTitleButton");
+
+            doubleClickOn("#updateTitleTitle");
+            write(t.getTitle());
+            doubleClickOn("#updateTitleProductId");
+            write(t.getProductId());
+            doubleClickOn("#updateTitlePrice");
+            write(t.getPriceDollars());
+            doubleClickOn("#updateTitleNotes");
+            write(t.getNotes());
+
+            clickOn("#updateTitleButton");
+        }
+    }
+
+    @When("I delete titles$")
+    public void i_delete_titles(DataTable args)
+    {
+        List<Title> titles = createTitleList(args);
+
+        for(Title t : titles)
+        {
+            clickOn(t.getTitle());
+            clickOn("#deleteTitleButton");
+            clickOn("#yesButton");
+        }
+    }
+
+    @When("I search titles: {string}")
+    public void i_search_titles(String title)
+    {
+        clickOn("#TitleSearch");
+        write(title);
+        write('\n');
+    }
+
+    @When("I update add title with title: {string}")
+    public void i_update_add_title_with_title(String title)
+    {
+        doubleClickOn("#newTitleTitle");
+        write(title);
+        clickOn("#addTitleButton");
+    }
+
+    @When("I flag title: {string}")
+    public void i_flag_title(String title)
+    {
+        i_search_titles(title);
+        for (int i = 0; i < 6; i++)
+        {
+            press(KeyCode.TAB);
+            release(KeyCode.TAB);
+        }
+        press(KeyCode.ENTER);
+        release(KeyCode.ENTER);
+        push(new KeyCodeCombination(KeyCode.M, KeyCodeCombination.CONTROL_DOWN));
+        clickOn("#saveFlagsButton");
+    }
+
+    @When("I click release flags")
+    public void i_click_release_flags()
+    {
+        clickOn("#resetFlagsButton");
+    }
+    //#endregion
+
+    //#region Titles Data Validation
+    @Then("I should see titles$")
+    public void i_should_see_titles(DataTable args)
+    {
+        List<Title> titles = createTitleList(args);
+        List<Title> actualTitles = controller.getTitlesList();
+
+        // Check for same number of customers
+        assertEquals(titles.size(), actualTitles.size());
+        // Check customers were saved correctly in DB
+        for (int i = 0; i < titles.size(); i++)
+        {
+            assertTrue(titles.get(i).equals(actualTitles.get(i)));
+        }
+        // Check each of the customers shows on the application
+        for (Title t : titles)
+        {
+            clickOn(t.getTitle());
+        }
+    }
+
+    @Then("I should only see titles$")
+    public void i_should_only_see_titles(DataTable args)
+    {
+        List<Title> titles = createTitleList(args);
+        List<Title> totalTitles = controller.getTitlesList();
+
+        // Check expected result shows on application
+        for (Title t : titles)
+        {
+            clickOn(t.getTitle());
+        }
+
+        // Check other titles are not shown
+        for (Title t : totalTitles)
+        {
+            if (!titles.contains(t))
+            {
+                try {
+                    clickOn(t.getTitle());
+                }
+                catch (FxRobotException e)
+                {
+                    assertEquals("the query \"" + t.getTitle() + "\" returned no nodes.", e.getMessage());
+                }
+            }
+        }
+    }
+
+    @Then("I should see title is flagged: {string}")
+    public void i_should_see_title_is_flagged(String title)
+    {
+        List<Title> flagged = controller.getFlaggedList();
+        assertTrue(flagged.stream().filter(t -> t.getTitle().equals(title)).count() > 0);
+    }
+
+    @Then("I should see title is not flagged: {string}")
+    public void i_should_see_title_is_not_flagged(String title)
+    {
+        List<Title> flagged = controller.getFlaggedList();
+        assertTrue(flagged.stream().filter(t -> t.getTitle().equals(title)).count() == 0);
+    }
+    //#endregion
+
+    //#endregion
+
     private List<Customer> createCustomerList(DataTable t)
     {
         List<Customer> customers = new ArrayList<>();
@@ -223,5 +415,31 @@ public class StepDefinitions extends ApplicationTest {
                             Objects.toString(columns.get(4), ""), false));
         }
         return customers;
+    }
+
+    private List<Title> createTitleList(DataTable t)
+    {
+        List<Title> titles = new ArrayList<>();
+        List<List<String>> rows = t.asLists(String.class);
+
+        for (List<String> columns : rows.subList(1, rows.size())) {
+            titles.add(
+                    new Title(0,
+                            Objects.toString(columns.get(0), ""),
+                            Integer.parseInt(dollarsToCents(columns.get(2))),
+                            Objects.toString(columns.get(3), ""),
+                            Objects.toString(columns.get(1), ""),
+                            LocalDate.now()));
+        }
+        return titles;
+    }
+
+    private String dollarsToCents(String priceDollars) {
+        if (priceDollars == "") {
+            return null;
+        }
+        priceDollars = priceDollars.replace(".", "");
+        priceDollars = priceDollars.replaceAll(",", "");
+        return priceDollars;
     }
 }

@@ -222,4 +222,10 @@ public class Title {
      */
     public void setIssueFlagged(int issueFlagged) { this.issueFlagged = issueFlagged; }
 
+    public boolean equals(Title t)
+    {
+        return this.title.equals(t.getTitle()) && this.price == t.getPrice()
+                && this.notes.equals(t.getNotes()) && this.productId.equals(t.getProductId())
+                && this.dateCreated.equals(t.getDateCreated());
+    }
 }

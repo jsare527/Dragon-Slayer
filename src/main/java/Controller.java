@@ -3380,4 +3380,72 @@ public class Controller implements Initializable {
 
         return customers;
     }
+
+    public ArrayList<Title> getTitlesList()
+    {
+        ArrayList<Title> titles = new ArrayList<Title>();
+        Statement s = null;
+        try
+        {
+            s = conn.createStatement();
+            ResultSet results = s.executeQuery("select * from Titles order by TITLE");
+
+            while(results.next())
+            {
+                int titleId = results.getInt("TITLEID");
+                String title = results.getString("TITLE");
+                int price= results.getInt("PRICE");
+                String notes = results.getString("NOTES");
+                String productId = results.getString("PRODUCTID");
+                Date dateCreated = results.getDate("DATECREATED");
+                boolean flagged = results.getBoolean("FLAGGED");
+                Date dateFlagged = results.getDate("DATE_FLAGGED");
+                int issueFlagged = results.getInt("ISSUE_FLAGGED");
+                titles.add(new Title(titleId, title, price, notes, productId, (dateCreated == null ? null :dateCreated.toLocalDate()),
+                        flagged, (dateFlagged == null ? null :dateFlagged.toLocalDate()), issueFlagged));
+            }
+            results.close();
+            s.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+
+        return titles;
+    }
+
+    public ArrayList<Title> getFlaggedList()
+    {
+        ArrayList<Title> titles = new ArrayList<Title>();
+        Statement s = null;
+        try
+        {
+            s = conn.createStatement();
+            ResultSet results = s.executeQuery("select * from Titles where FLAGGED=TRUE order by TITLE");
+
+            while(results.next())
+            {
+                int titleId = results.getInt("TITLEID");
+                String title = results.getString("TITLE");
+                int price= results.getInt("PRICE");
+                String notes = results.getString("NOTES");
+                String productId = results.getString("PRODUCTID");
+                Date dateCreated = results.getDate("DATECREATED");
+                boolean flagged = results.getBoolean("FLAGGED");
+                Date dateFlagged = results.getDate("DATE_FLAGGED");
+                int issueFlagged = results.getInt("ISSUE_FLAGGED");
+                titles.add(new Title(titleId, title, price, notes, productId, (dateCreated == null ? null :dateCreated.toLocalDate()),
+                        flagged, (dateFlagged == null ? null :dateFlagged.toLocalDate()), issueFlagged));
+            }
+            results.close();
+            s.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+
+        return titles;
+    }
 }
