@@ -142,8 +142,8 @@ public class Customer {
     }
 
     /**
-     * Sets the email address of the customer
-     * @param email The customer's email address
+     * Sets the notes of the customer
+     * @param notes The notes on the customers
      */
     public void setNotes(String notes) {
         this.notes = notes;
