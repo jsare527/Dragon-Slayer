@@ -986,7 +986,7 @@ public class Controller implements Initializable {
 
                     if (newSelection.getDateFlagged() != null) {
                         titleDateFlagged.setText(newSelection.getDateFlagged().toString());
-                        if (newSelection.getDateFlagged().isBefore(sixMonthsAgo) && newSelection.getDateCreated() != null && newSelection.getDateCreated().isBefore(sixMonthsAgo)) {
+                        if (newSelection.getDateFlagged().isBefore(sixMonthsAgo) && (newSelection.getDateCreated() == null || newSelection.getDateCreated().isBefore(sixMonthsAgo))) {
                             titleDateFlaggedNoticeText.setVisible(true);
                         }
                         else {
@@ -3509,5 +3509,76 @@ public class Controller implements Initializable {
         }
 
         return orders;
+    }
+
+    public void addCustomers(ArrayList<Customer> customers) throws SQLException
+    {
+        for (Customer c : customers)
+        {
+            PreparedStatement insert = null;
+            String sql = "INSERT INTO Customers (firstname, lastname, phone, email, notes) VALUES (?, ?, ?, ?, ?)";
+
+            insert = conn.prepareStatement(sql);
+            insert.setString(1, c.getFirstName());
+            insert.setString(2, c.getLastName());
+            insert.setString(3, c.getPhone());
+            insert.setString(4, c.getEmail());
+            insert.setString(5, c.getNotes());
+            //int rowsAffected =
+            insert.executeUpdate();
+
+            insert.close();
+        }
+    }
+
+    public void addTitles(ArrayList<Title> titles) throws SQLException
+    {
+        for (Title t : titles)
+        {
+            PreparedStatement insert = null;
+            String sql = "INSERT INTO Titles (TITLE, PRICE, NOTES, PRODUCTID, DATECREATED, DATE_FLAGGED) VALUES (?, ?, ?, ?, ?, ?)";
+            Date flagged = t.getDateCreated() == null ? new Date(2323223232L) : java.sql.Date.valueOf(t.getDateCreated());
+            insert = conn.prepareStatement(sql);
+            insert.setString(1, t.getTitle());
+            insert.setObject(2, t.getPrice(), Types.INTEGER);
+            insert.setString(3, t.getNotes());
+            insert.setString(4, t.getProductId());
+            insert.setDate(5, t.getDateCreated() == null ? null : java.sql.Date.valueOf(t.getDateCreated()));
+            insert.setDate(6, flagged);
+            insert.executeUpdate();
+            insert.close();
+        }
+    }
+
+    public void addOrders(String title, ArrayList<RequestTable> orders) throws SQLException
+    {
+        ArrayList<Customer> c = getCustomerList();
+        ArrayList<Title> t = getTitlesList();
+        ArrayList<RequestTable> ox = getOrderListForTitle(title);
+        for (RequestTable o : orders)
+        {
+            PreparedStatement s = null;
+            String sql = "INSERT INTO Orders (customerId, titleId, quantity, issue) VALUES (?, ?, ?, ?)";
+            int titleId = t.stream().filter(tl -> tl.getTitle().equals(title)).findFirst().get().getId();
+            int customerId = c.stream().filter(cs -> cs.getLastName().equals(o.getRequestLastName())
+                && cs.getFirstName().equals(o.getRequestFirstName())).findFirst().get().getId();
+            s = conn.prepareStatement(sql);
+            s.setString(1, Integer.toString(customerId));
+            s.setString(2, Integer.toString(titleId));
+            s.setString(3, o.getRequestQuantity());
+            s.setObject(4, o.getIssue(), Types.INTEGER);
+            s.executeUpdate();
+            s.close();
+        }
+    }
+
+    public void emptyDB() throws SQLException {
+        Statement s = null;
+        s = conn.createStatement();
+        s.execute("DELETE FROM Orders");
+        s.execute("DELETE FROM Customers");
+        s.execute("DELETE FROM Titles");
+        conn.commit();
+        s.close();;
     }
 }

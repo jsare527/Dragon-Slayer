@@ -133,3 +133,46 @@ Feature: Customers
     Then I should see customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
 
+  Scenario: Verify Consistent Orders for each Title
+    Given Customers
+      |  firstName   |  lastName   |   phone      |  email            |  notes   |
+      | Zach         | Cart        | 581-237-9918 | zachCart@max.com  | Weirdo   |
+      | May          | Lee         |              |                   |          |
+      | Mark         | Smith       | 402-111-1111 | mSmith@yahoo.com  |          |
+    Given Titles
+      | Title     | Product Id  | Price       | Notes     | ID   |  Date Created  |
+      | Superman  | 10          | 12.10       |           | 1    |  01/10/2023    |
+      | Batman    | 11          | 13.50       |           | 2    |  10/22/2022    |
+      | Joker     | 13          | 11.00       |           | 3    |                |
+      | Robin     | 15          | 16.10       |           | 4    |  06/15/2023    |
+      | Nightwing | 18          | 19.50       |           | 5    |  09/10/2023    |
+      | Flash     | 20          | 10.00       |           | 6    |                |
+    Given Request Table for title: "Superman"
+      | Last Name   | First Name    | Quantity  | Issue |
+      | Cart        | Zach          | 3         |       |
+      | Lee         | May           | 2         |       |
+    Given Request Table for title: "Joker"
+      | Last Name   | First Name    | Quantity  | Issue |
+      | Smith       | Mark          | 1         |       |
+    Given Request Table for title: "Nightwing"
+      | Last Name   | First Name    | Quantity  | Issue |
+      | Cart        | Zach          | 3         |       |
+      | Smith       | Mark          | 1         |       |
+    Given Request Table for title: "Flash"
+      | Last Name   | First Name    | Quantity  | Issue |
+      | Lee         | May           | 2         |       |
+    When I click on Titles tab
+    Then I should see orders for title: "Superman"
+      | Last Name   | First Name    | Quantity  | Issue |
+      | Cart        | Zach          | 3         |       |
+      | Lee         | May           | 2         |       |
+    Then I should see orders for title: "Joker"
+      | Last Name   | First Name    | Quantity  | Issue |
+      | Smith       | Mark          | 1         |       |
+    Then I should see orders for title: "Nightwing"
+      | Last Name   | First Name    | Quantity  | Issue |
+      | Cart        | Zach          | 3         |       |
+      | Smith       | Mark          | 1         |       |
+    Then I should see orders for title: "Flash"
+      | Last Name   | First Name    | Quantity  | Issue |
+      | Lee         | May           | 2         |       |

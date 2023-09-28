@@ -1,6 +1,7 @@
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +16,9 @@ import org.testfx.api.FxRobotException;
 import org.testfx.api.FxToolkit;
 import org.testfx.framework.junit.ApplicationTest;
 
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +37,7 @@ public class StepDefinitions extends ApplicationTest {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("sample.fxml"));
         fxmlLoader.load();
         controller = fxmlLoader.getController();
+        //controller.emptyDB();
     }
 
     @After
@@ -44,6 +48,13 @@ public class StepDefinitions extends ApplicationTest {
     }
 
     //#region Customer Functions
+
+    @Given("Customers$")
+    public void customers(DataTable args) throws SQLException
+    {
+        ArrayList<Customer> customers = (ArrayList<Customer>) createCustomerList(args);
+        controller.addCustomers(customers);
+    }
 
     //#region Customer Buttons and Inputs
     @When("I click on Customers tab")
@@ -233,6 +244,13 @@ public class StepDefinitions extends ApplicationTest {
 
     //#region Title Functions
 
+    @Given("Titles$")
+    public void titles(DataTable args) throws SQLException
+    {
+        ArrayList<Title> titles = (ArrayList<Title>) createTitleList(args);
+        controller.addTitles(titles);
+    }
+
     //#region Title Buttons and Inputs
 
     @When("I click on Titles tab")
@@ -405,6 +423,13 @@ public class StepDefinitions extends ApplicationTest {
 
     //#region Order Function
 
+    @Given("Request Table for title: {string}")
+    public void request_table_for_title(String title, DataTable args) throws SQLException
+    {
+        ArrayList<RequestTable> requestTables = createRequestTable(args);
+        controller.addOrders(title, requestTables);
+    }
+
     //#region Order Buttons
     @When("I add requests for last name: {string}")
     public void i_add_requests_for_last_name(String customer, DataTable args)
@@ -512,9 +537,9 @@ public class StepDefinitions extends ApplicationTest {
 
     //#endregion
 
-    private List<Customer> createCustomerList(DataTable t)
+    private ArrayList<Customer> createCustomerList(DataTable t)
     {
-        List<Customer> customers = new ArrayList<>();
+        ArrayList<Customer> customers = new ArrayList<>();
         List<List<String>> rows = t.asLists(String.class);
 
         for (List<String> columns : rows.subList(1, rows.size())) {
@@ -528,43 +553,58 @@ public class StepDefinitions extends ApplicationTest {
         return customers;
     }
 
-    private List<Title> createTitleList(DataTable t)
+    private ArrayList<Title> createTitleList(DataTable t)
     {
-        List<Title> titles = new ArrayList<>();
+        ArrayList<Title> titles = new ArrayList<>();
         List<List<String>> rows = t.asLists(String.class);
-
         for (List<String> columns : rows.subList(1, rows.size())) {
+            String title = Objects.toString(columns.get(0), "");
+            int price = Integer.parseInt(dollarsToCents(columns.get(2)));
+            String notes = Objects.toString(columns.get(3), "");
+            String productId = Objects.toString(columns.get(1), "");
+            int id = 0;
+            LocalDate date = LocalDate.now();
+            if (columns.size() == 6)
+            {
+                id = Integer.parseInt(columns.get(4));
+                date = columns.get(5) == null ? null : LocalDate.parse(columns.get(5), DateTimeFormatter.ofPattern("MM/dd/yyyy"));
+            }
             titles.add(
-                    new Title(0,
-                            Objects.toString(columns.get(0), ""),
-                            Integer.parseInt(dollarsToCents(columns.get(2))),
-                            Objects.toString(columns.get(3), ""),
-                            Objects.toString(columns.get(1), ""),
-                            LocalDate.now()));
+                    new Title(id, title, price, notes, productId, date));
         }
         return titles;
     }
 
-    private List<Order> createOrderList(DataTable t)
+    private ArrayList<Order> createOrderList(DataTable t)
     {
-        List<Order> orders = new ArrayList<>();
+        ArrayList<Order> orders = new ArrayList<>();
         List<List<String>> rows = t.asLists(String.class);
         for (List<String> columns : rows.subList(1, rows.size())) {
+            String title = Objects.toString(columns.get(0), "");
+            int quantity = columns.get(1) == null ? 0 : Integer.parseInt(columns.get(1));
+            int issue = columns.get(2) == null ? 0 : Integer.parseInt(columns.get(2));
+            int customerId = 1;
+            int titleId = 1;
+            if (columns.size() == 5)
+            {
+                customerId = Integer.parseInt(columns.get(3));
+                titleId = Integer.parseInt(columns.get(4));
+            }
             orders.add(
                     new Order(
-                            1,
-                            1,
-                            Objects.toString(columns.get(0), ""),
-                            columns.get(1) == null ? 0 : Integer.parseInt(columns.get(1)),
-                            columns.get(2) == null ? 0 : Integer.parseInt(columns.get(2))
+                            customerId,
+                            titleId,
+                            title,
+                            quantity,
+                            issue
                     ));
         }
         return orders;
     }
 
-    private List<RequestTable> createRequestTable(DataTable t)
+    private ArrayList<RequestTable> createRequestTable(DataTable t)
     {
-        List<RequestTable> requestTables = new ArrayList<>();
+        ArrayList<RequestTable> requestTables = new ArrayList<>();
         List<List<String>> rows = t.asLists(String.class);
         for (List<String> columns : rows.subList(1, rows.size())) {
             requestTables.add(
