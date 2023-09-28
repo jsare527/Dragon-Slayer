@@ -277,7 +277,7 @@
                                                     <Text fx:id="FlaggedTitlesTotalText" strokeType="OUTSIDE" strokeWidth="0.0" />
                                                     <Text fill="#666666" strokeType="OUTSIDE" strokeWidth="0.0" text="Titles Currently Flagged For" underline="true" wrappingWidth="156.62060546875" GridPane.columnIndex="1" />
                                                     <Text fx:id="FlaggedTitlesTotalCustomersText" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.rowIndex="1" />
-                                                    <Text fill="#666666" strokeType="OUTSIDE" strokeWidth="0.0" text="Customers" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                    <Text fill="#666666" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Customers" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                     <Text fx:id="FlaggedIssueNumbersText" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.rowIndex="2" />
                                                     <Text fill="#666666" strokeType="OUTSIDE" strokeWidth="0.0" text="Titles Have Triggered Issue #'s" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                     <Text fx:id="FlaggedNoRequestsText" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.rowIndex="3" />
