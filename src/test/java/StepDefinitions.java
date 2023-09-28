@@ -1,7 +1,6 @@
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import javafx.fxml.FXMLLoader;
@@ -20,6 +19,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -44,13 +44,15 @@ public class StepDefinitions extends ApplicationTest {
     }
 
     //#region Customer Functions
-    @Given("I click on Customers tab")
-    public void i_click_on_customers_tab()
-    {
-        clickOn("Customers");
-    }
 
     //#region Customer Buttons and Inputs
+    @When("I click on Customers tab")
+    public void i_click_on_customers_tab() throws InterruptedException
+    {
+        clickOn("Customers");
+        TimeUnit.MILLISECONDS.sleep(20);
+    }
+
     @When("I add customers$")
     public void i_add_customers(DataTable args) throws Throwable
     {
@@ -124,7 +126,7 @@ public class StepDefinitions extends ApplicationTest {
 
         for(Customer c : customers)
         {
-            clickOn(c.getFirstName());
+            clickOn(c.getLastName());
             clickOn("#deleteCustomerButton");
             clickOn("#yesButton");
         }
@@ -231,13 +233,13 @@ public class StepDefinitions extends ApplicationTest {
 
     //#region Title Functions
 
-    @Given("I click on Titles tab")
+    //#region Title Buttons and Inputs
+
+    @When("I click on Titles tab")
     public void i_click_on_titles_tab()
     {
         clickOn("Titles");
     }
-
-    //#region Title Buttons and Inputs
 
     @When("I add titles$")
     public void i_add_titles(DataTable args)
@@ -395,8 +397,117 @@ public class StepDefinitions extends ApplicationTest {
     public void i_should_see_title_is_not_flagged(String title)
     {
         List<Title> flagged = controller.getFlaggedList();
-        assertTrue(flagged.stream().filter(t -> t.getTitle().equals(title)).count() == 0);
+        assertEquals(flagged.stream().filter(t -> t.getTitle().equals(title)).count(), 0);
     }
+    //#endregion
+
+    //#endregion
+
+    //#region Order Function
+
+    //#region Order Buttons
+    @When("I add requests for last name: {string}")
+    public void i_add_requests_for_last_name(String customer, DataTable args)
+    {
+        clickOn(customer);
+        List<Order> orders = createOrderList(args);
+        for (Order o : orders)
+        {
+            clickOn("#newOrderButton");
+            write(o.getTitleName());
+            press(KeyCode.TAB);
+            release(KeyCode.TAB);
+            write(String.valueOf(o.getIssue()));
+            press(KeyCode.TAB);
+            release(KeyCode.TAB);
+            write(String.valueOf(o.getQuantity()));
+            clickOn("#addOrderButton");
+        }
+    }
+
+    @When("I edit requests for last name: {string}")
+    public void i_edit_requests_for_last_name(String customer, DataTable args)
+    {
+        clickOn(customer);
+        List<Order> orders = createOrderList(args);
+        for (Order o : orders)
+        {
+            clickOn("#editOrderButton");
+            write(o.getTitleName());
+            press(KeyCode.TAB);
+            release(KeyCode.TAB);
+            write(String.valueOf(o.getIssue()));
+            press(KeyCode.TAB);
+            release(KeyCode.TAB);
+            write(String.valueOf(o.getQuantity()));
+            clickOn("#updateOrderButton");
+        }
+    }
+
+    @When("I delete requests for last name: {string}")
+    public void i_delete_requests_for_last_name(String customer, DataTable args)
+    {
+        // Currently deletes the number of orders as it cant choose specific titles
+        clickOn(customer);
+        List<Order> orders = createOrderList(args);
+        for (Order o : orders)
+        {
+            clickOn("#customerOrderReqItemsColumn");
+            press(KeyCode.UP);
+            release(KeyCode.UP);
+            clickOn("#deleteOrderButton");
+            clickOn("#yesButton");
+        }
+    }
+    //#endregion
+
+    //#region Order Validation
+    @Then("I should see orders for last name: {string}")
+    public void i_should_see_orders_for_last_name(String customer, DataTable args)
+    {
+        clickOn(customer);
+        List<Order> orders = createOrderList(args);
+        List<Order> actualOrders = controller.getOrderListForCustomer(customer);
+
+        // Check orders were saved properly in database
+        assertEquals(orders.size(), actualOrders.size());
+        for (int i = 0; i < orders.size(); i++)
+        {
+            Order o1 = orders.get(i);
+            Order o2 = actualOrders.get(i);
+            assertEquals(o1.getTitleName(), o2.getTitleName());
+            assertEquals(o1.getIssue(), o2.getIssue());
+            assertEquals(o1.getQuantity(), o2.getQuantity());
+        }
+
+        // Check that orders show on application
+        for (Order o : orders)
+        {
+            clickOn(o.getTitleName());
+        }
+    }
+
+    @Then("I should see orders for title: {string}")
+    public void i_should_see_orders_for_title(String title, DataTable args)
+    {
+        clickOn(title);
+        List<RequestTable> orders = createRequestTable(args);
+        List<RequestTable> actualOrders = controller.getOrderListForTitle(title);
+
+        // Check orders were saved properly in database
+        assertEquals(orders.size(), actualOrders.size());
+        for (int i = 0; i < orders.size(); i++)
+        {
+            orders.get(i).equals(actualOrders.get(i));
+        }
+
+        // Check that orders show on application
+        for (RequestTable o : orders)
+        {
+            clickOn(o.getRequestLastName());
+        }
+    }
+    //#endredgion
     //#endregion
 
     //#endregion
@@ -432,6 +543,39 @@ public class StepDefinitions extends ApplicationTest {
                             LocalDate.now()));
         }
         return titles;
+    }
+
+    private List<Order> createOrderList(DataTable t)
+    {
+        List<Order> orders = new ArrayList<>();
+        List<List<String>> rows = t.asLists(String.class);
+        for (List<String> columns : rows.subList(1, rows.size())) {
+            orders.add(
+                    new Order(
+                            1,
+                            1,
+                            Objects.toString(columns.get(0), ""),
+                            columns.get(1) == null ? 0 : Integer.parseInt(columns.get(1)),
+                            columns.get(2) == null ? 0 : Integer.parseInt(columns.get(2))
+                    ));
+        }
+        return orders;
+    }
+
+    private List<RequestTable> createRequestTable(DataTable t)
+    {
+        List<RequestTable> requestTables = new ArrayList<>();
+        List<List<String>> rows = t.asLists(String.class);
+        for (List<String> columns : rows.subList(1, rows.size())) {
+            requestTables.add(
+                    new RequestTable(
+                            Objects.toString(columns.get(0), ""),
+                            Objects.toString(columns.get(1), ""),
+                            columns.get(2) == null ? 0 : Integer.parseInt(columns.get(2)),
+                            columns.get(3) == null ? 0 : Integer.parseInt(columns.get(3))
+                    ));
+        }
+        return requestTables;
     }
 
     private String dollarsToCents(String priceDollars) {

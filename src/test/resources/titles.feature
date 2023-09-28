@@ -3,7 +3,7 @@ Feature: Titles
   Note: This feature is meant to be run with an empty database
 
   Scenario: Create, Edit, and Delete a Title
-    Given I click on Titles tab
+    When I click on Titles tab
     When I add titles
       | Title     | Product Id  | Price   | Notes     |
       | Superman  | 10          | 10      |           |
@@ -23,17 +23,17 @@ Feature: Titles
       | Title     | Product Id  | Price   | Notes     |
 
   Scenario: Create, Edit, and Delete Multiple Titles
-    Given I click on Titles tab
+    When I click on Titles tab
     When I add titles
-      | Title     | Product Id  | Price   | Notes     |
-      | Superman  | 10          | 12      |           |
-      | Batman    | 11          | 13      |           |
-      | Joker     | 13          | 10      |           |
+      | Title     | Product Id  | Price      | Notes     |
+      | Superman  | 10          | 12.00      |           |
+      | Batman    | 11          | 13.50      |           |
+      | Joker     | 13          | 10.25      |           |
     Then I should see titles
-      | Title     | Product Id  | Price   | Notes     |
-      | Batman    | 11          | 13      |           |
-      | Joker     | 13          | 10      |           |
-      | Superman  | 10          | 12      |           |
+      | Title     | Product Id  | Price      | Notes     |
+      | Batman    | 11          | 13.50      |           |
+      | Joker     | 13          | 10.25      |           |
+      | Superman  | 10          | 12.00      |           |
     When I edit titles
       | Title       | Product Id  | Price   | Notes     |
       | Batman      | 11          | 16      |           |
@@ -52,7 +52,7 @@ Feature: Titles
       | Title     | Product Id  | Price   | Notes     |
 
   Scenario: Creating Duplicate Titles
-    Given I click on Titles tab
+    When I click on Titles tab
     When I add titles
       | Title     | Product Id  | Price   | Notes     |
       | Superman  | 10          | 12      |           |
@@ -71,7 +71,7 @@ Feature: Titles
       | Title           | Product Id  | Price   | Notes     |
 
   Scenario: Search for Titles
-    Given I click on Titles tab
+    When I click on Titles tab
     When I add titles
       | Title     | Product Id  | Price   | Notes     |
       | Superman  | 10          | 12      |           |
@@ -101,7 +101,7 @@ Feature: Titles
       | Title     | Product Id  | Price   | Notes     |
 
   Scenario: Create Invalid Titles
-    Given I click on Titles tab
+    When I click on Titles tab
     When I add titles
       | Title     | Product Id  | Price   | Notes     |
       | Superman  | 10          | 10      |           |
@@ -125,7 +125,7 @@ Feature: Titles
       | Title     | Product Id  | Price   | Notes     |
 
   Scenario: Create and Release Save Flags
-    Given I click on Titles tab
+    When I click on Titles tab
     When I add titles
       | Title     | Product Id  | Price       | Notes     |
       | Superman  | 10          | 12.10       |           |

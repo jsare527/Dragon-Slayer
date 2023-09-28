@@ -3448,4 +3448,66 @@ public class Controller implements Initializable {
 
         return titles;
     }
+
+    public ArrayList<Order> getOrderListForCustomer(String lastName)
+    {
+        ArrayList<Order> orders = new ArrayList<Order>();
+        Statement s = null;
+        try
+        {
+            s = conn.createStatement();
+            ResultSet customers = s.executeQuery("select CUSTOMERID from CUSTOMERS where LASTNAME='" + lastName + "'");
+            customers.next();
+            int customerId = customers.getInt("CUSTOMERID");
+            ResultSet results = s.executeQuery("SELECT * FROM ORDERS o INNER JOIN TITLES t ON o.TITLEID=t.TITLEID where CUSTOMERID=" + customerId + " order by TITLE");
+
+            while(results.next())
+            {
+                int titleId = results.getInt("TITLEID");
+                String title = results.getString("TITLE");
+                int quantity = results.getInt("QUANTITY");
+                int issue = results.getInt("ISSUE");
+                orders.add(new Order(customerId, titleId, title, quantity, issue));
+            }
+            results.close();
+            s.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+
+        return orders;
+    }
+
+    public ArrayList<RequestTable> getOrderListForTitle(String title)
+    {
+        ArrayList<RequestTable> orders = new ArrayList<RequestTable>();
+        Statement s = null;
+        try
+        {
+            s = conn.createStatement();
+            ResultSet titles = s.executeQuery("select TITLEID from TITLES where TITLE='" + title + "'");
+            titles.next();
+            int titleId = titles.getInt("TITLEID");
+            ResultSet results = s.executeQuery("SELECT * FROM ORDERS o INNER JOIN CUSTOMERS c ON o.CUSTOMERID=c.CUSTOMERID where TITLEID=" + titleId + " order by LASTNAME");
+
+            while(results.next())
+            {
+                String lastname = results.getString("LASTNAME");
+                String firstname = results.getString("FIRSTNAME");
+                int quantity = results.getInt("QUANTITY");
+                int issue = results.getInt("ISSUE");
+                orders.add(new RequestTable(lastname, firstname, quantity, issue));
+            }
+            results.close();
+            s.close();
+        }
+        catch (SQLException sqlExcept)
+        {
+            sqlExcept.printStackTrace();
+        }
+
+        return orders;
+    }
 }

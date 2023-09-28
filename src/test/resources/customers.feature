@@ -3,7 +3,7 @@ Feature: Customers
   Note: This feature is meant to be run with an empty database
 
   Scenario: Create, Edit, and Delete One Customer
-    Given I click on Customers tab
+    When I click on Customers tab
     When I add customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
       | Mark         | Smith       | 402-111-1111 | mSmith@yahoo.com  |          |
@@ -23,7 +23,7 @@ Feature: Customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
 
   Scenario: Create, Edit, and Delete Multiple Customers
-    Given I click on Customers tab
+    When I click on Customers tab
     When I add customers
     |  firstName   |  lastName   |   phone      |  email            |  notes   |
     | May          | Lee         |              |                   |          |
@@ -53,7 +53,7 @@ Feature: Customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
 
   Scenario: Creating Duplicate Customers
-    Given I click on Customers tab
+    When I click on Customers tab
     When I add customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
       | May          | Lee         |              |                   |          |
@@ -72,7 +72,7 @@ Feature: Customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
 
   Scenario: Search for Customers
-    Given I click on Customers tab
+    When I click on Customers tab
     When I add customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
       | May          | Lee         |              |                   |          |
@@ -102,7 +102,7 @@ Feature: Customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
 
   Scenario: Mark Customer Delinquent and Non-Delinquent
-    Given I click on Customers tab
+    When I click on Customers tab
     When I add customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
       | Mark         | Smith       | 402-111-1111 | mSmith@yahoo.com  |          |
@@ -120,7 +120,7 @@ Feature: Customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
 
   Scenario: Create Invalid Customers
-    Given I click on Customers tab
+    When I click on Customers tab
     When I add customers
       |  firstName    |  lastName   |   phone       |  email              |  notes    |
       | Mark          | Smith       | 402-111-1111  | mSmith@yahoo.com    |           |
