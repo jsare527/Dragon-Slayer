@@ -133,7 +133,7 @@ Feature: Customers
     Then I should see customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
 
-  Scenario: Verify Consistent Orders for each Title
+  Scenario: Verify Consistent Orders for each Title - Only worked with emptyDB()
     Given Customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
       | Zach         | Cart        | 581-237-9918 | zachCart@max.com  | Weirdo   |

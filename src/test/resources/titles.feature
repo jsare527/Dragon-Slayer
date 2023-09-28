@@ -42,7 +42,7 @@ Feature: Titles
       | Title       | Product Id  | Price   | Notes     |
       | Batman      | 11          | 16      |           |
       | Joker       | 13          | 9       |           |
-      | Superman  | 10            | 12      |           |
+      | Superman    | 10          | 12.00   |           |
     When I delete titles
       | Title     | Product Id  | Price   | Notes     |
       | Superman  | 10          | 12      |           |
