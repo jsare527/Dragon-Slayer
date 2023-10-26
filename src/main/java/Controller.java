@@ -2692,7 +2692,7 @@ public class Controller implements Initializable {
         ObservableList<Title> sortedTitles = FXCollections.observableArrayList();
 
         for (Title title : titles) {
-            if (title.getTitle().toLowerCase().contains(search) || title.getProductId().contains(search))
+            if (title.getTitle().toLowerCase().contains(search) || title.getProductId().toLowerCase().contains(search))
             {
                 sortedTitles.add(title);
             }
