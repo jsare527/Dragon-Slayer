@@ -2686,7 +2686,7 @@ public class Controller implements Initializable {
         }
         else 
         {
-            titles = titleTable.getItems();
+            titles = titleTable.getItems().sorted(Comparator.comparing(Title::getTitle, String.CASE_INSENSITIVE_ORDER));
         }
 
         ObservableList<Title> sortedTitles = FXCollections.observableArrayList();
@@ -3327,7 +3327,7 @@ public class Controller implements Initializable {
         try
         {
             Statement s = conn.createStatement();
-            ResultSet results = s.executeQuery("select * from Titles order by TITLE");
+            ResultSet results = s.executeQuery("select * from Titles order by UPPER(TITLE)");
 
             while(results.next())
             {
@@ -3416,7 +3416,7 @@ public class Controller implements Initializable {
         try
         {
             s = conn.createStatement();
-            ResultSet results = s.executeQuery("select * from Titles order by TITLE");
+            ResultSet results = s.executeQuery("select * from Titles order by UPPER(TITLE)");
 
             while(results.next())
             {
