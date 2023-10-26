@@ -150,3 +150,40 @@ Feature: Titles
     Then I should see titles
       | Title     | Product Id  | Price   | Notes     |
 
+  Scenario: Sorting Titles Incasesensitive
+    When I click on Titles tab
+    When I add titles
+      | Title     | Product Id  | Price   | Notes     |
+      | AB        | 1           | 10      |           |
+      | bA        | 3           | 10      |           |
+      | ac        | 2           | 10      |           |
+      | bC        | 5           | 10      |           |
+      | BB        | 4           | 10      |           |
+    Then I should see titles
+      | Title     | Product Id  | Price   | Notes     |
+      | AB        | 1           | 10      |           |
+      | ac        | 2           | 10      |           |
+      | bA        | 3           | 10      |           |
+      | BB        | 4           | 10      |           |
+      | bC        | 5           | 10      |           |
+    When I add titles
+      | Title     | Product Id  | Price   | Notes     |
+      | aa        | 0           | 10      |           |
+    Then I should see titles
+      | Title     | Product Id  | Price   | Notes     |
+      | aa        | 0           | 10      |           |
+      | AB        | 1           | 10      |           |
+      | ac        | 2           | 10      |           |
+      | bA        | 3           | 10      |           |
+      | BB        | 4           | 10      |           |
+      | bC        | 5           | 10      |           |
+    When I delete titles
+      | Title     | Product Id  | Price   | Notes     |
+      | aa        | 0           | 10      |           |
+      | AB        | 1           | 10      |           |
+      | ac        | 2           | 10      |           |
+      | bA        | 3           | 10      |           |
+      | BB        | 4           | 10      |           |
+      | bC        | 5           | 10      |           |
+    Then I should see titles
+      | Title     | Product Id  | Price   | Notes     |

@@ -3416,7 +3416,7 @@ public class Controller implements Initializable {
         try
         {
             s = conn.createStatement();
-            ResultSet results = s.executeQuery("select * from Titles order by TITLE");
+            ResultSet results = s.executeQuery("select * from Titles order by UPPER(TITLE)");
 
             while(results.next())
             {
