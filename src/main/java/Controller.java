@@ -1,8 +1,5 @@
 //import org.apache.poi.ss.formula.functions.T;
-import org.apache.commons.io.FileUtils;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.util.CellRangeAddress;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,24 +22,20 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.apache.commons.io.FileUtils;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-//import java.beans.EventHandler;
 import java.io.*;
 import java.net.URL;
+import java.sql.Date;
 import java.sql.*;
 import java.text.DateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Hashtable;
-//import java.util.List;
-//import java.util.Observable;
-import java.util.ResourceBundle;
-//import java.util.Set;
-import java.util.Scanner;
+import java.util.*;
 
 public class Controller implements Initializable {
 
@@ -863,7 +856,6 @@ public class Controller implements Initializable {
         titleTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         titleTable.getItems().setAll(this.getTitles());
         titleTable.getSortOrder().add(titleTitleColumn);
-        
 
         //Populate columns for flagged titles table in New Week Pulls Tab
         flaggedTitleColumn.setCellValueFactory(new PropertyValueFactory<>("flaggedTitleName"));
@@ -2692,7 +2684,11 @@ public class Controller implements Initializable {
         ObservableList<Title> sortedTitles = FXCollections.observableArrayList();
 
         for (Title title : titles) {
-            if (title.getTitle().toLowerCase().contains(search) || title.getProductId().toLowerCase().contains(search))
+            if (title.getProductId() != null && title.getProductId().toLowerCase().contains(search))
+            {
+                sortedTitles.add(title);
+            }
+            else if (title.getTitle().toLowerCase().contains(search))
             {
                 sortedTitles.add(title);
             }
