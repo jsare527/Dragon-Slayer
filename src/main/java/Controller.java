@@ -698,6 +698,7 @@ public class Controller implements Initializable {
 
             copy.flaggedProperty().addListener((obs, wasFlagged, isFlagged) -> {
                 if (isFlagged) {
+                    saveThisFlag(copy);
                     try {
                         Statement s = conn.createStatement();
                         String sql = "SELECT * FROM ORDERS WHERE TITLEID = " + copy.getId() + " AND ISSUE IS NOT NULL";
@@ -732,7 +733,10 @@ public class Controller implements Initializable {
                     }
                     this.unsaved = true;
                 }
-                if (!isFlagged && wasFlagged) this.unsaved = true;
+                if (!isFlagged && wasFlagged) {
+                    this.unsaved = true;
+                    unsaveThisFlag(copy);
+                }
             });
 
             titles.add(copy);
@@ -1146,40 +1150,33 @@ public class Controller implements Initializable {
      */
     @FXML
     void handleAddTitle(ActionEvent event) {
-        if (unsaved)
-        {
-            AlertBox.display("Flags Have Not Been Saved", "Please save or reset flags before adding a title.");
-        }
-        else 
-        {
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("NewTitleBox.fxml"));
-                Parent root = fxmlLoader.load();
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("NewTitleBox.fxml"));
+            Parent root = fxmlLoader.load();
 
-                NewTitleController newTitleController = fxmlLoader.getController();
-                newTitleController.setConnection(Controller.conn);
+            NewTitleController newTitleController = fxmlLoader.getController();
+            newTitleController.setConnection(Controller.conn);
 
-                Stage window = new Stage();
-                window.initModality(Modality.APPLICATION_MODAL);
-                window.setTitle("Add Title");
-                window.setResizable(false);
-                window.setHeight(285);
-                window.setWidth(400);
-                window.setScene(new Scene(root));
-                window.setOnHidden( e -> {
-                    if (newTitleController.titleWasAdded)
-                    {
-                        invalidateTitles();
-                        titleTable.getItems().setAll(getTitles());
-                        this.loadReportsTab();
-                    }
-                });
+            Stage window = new Stage();
+            window.initModality(Modality.APPLICATION_MODAL);
+            window.setTitle("Add Title");
+            window.setResizable(false);
+            window.setHeight(285);
+            window.setWidth(400);
+            window.setScene(new Scene(root));
+            window.setOnHidden( e -> {
+                if (newTitleController.titleWasAdded)
+                {
+                    invalidateTitles();
+                    titleTable.getItems().setAll(getTitles());
+                    this.loadReportsTab();
+                }
+            });
 
-                window.show();
-            } catch (Exception e) {
-                System.out.println("Error when opening window. This is probably a bug");
-                e.printStackTrace();
-            }
+            window.show();
+        } catch (Exception e) {
+            System.out.println("Error when opening window. This is probably a bug");
+            e.printStackTrace();
         }
     }
 
@@ -1345,10 +1342,10 @@ public class Controller implements Initializable {
         if (titleTable.getSelectionModel().getSelectedItems() == null) {
             AlertBox.display("Confirm Delete", "Please select a title.");
         }
-        else if (unsaved)
+        /*else if (unsaved)
         {
             AlertBox.display("Flags Have Not Been Saved", "Please save or reset flags before deleting a title.");
-        }
+        }*/
         else {
             ObservableList<Title> selectedTitles = titleTable.getSelectionModel().getSelectedItems();
 
@@ -1544,10 +1541,10 @@ public class Controller implements Initializable {
         if (titleTable.getSelectionModel().getSelectedItem() == null) {
             AlertBox.display("Confirm Edit", "Please select a title.");
         }
-        else if (unsaved)
+        /*else if (unsaved)
         {
             AlertBox.display("Flags Have Not Been Saved", "Please save or reset flags before editing a title.");
-        }
+        }*/
         else {
             try {
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("EditTitleBox.fxml"));
@@ -2600,6 +2597,61 @@ public class Controller implements Initializable {
         this.loadReportsTab();
 
         Log.LogMessage("Flags Saved");
+    }
+
+    @FXML
+    void saveThisFlag(Title title)
+    {
+        ZonedDateTime startOfToday = LocalDate.now().atStartOfDay(ZoneId.systemDefault());
+        long todayMillis = startOfToday.toEpochSecond() * 1000;
+        Date today = new Date(todayMillis);
+        PreparedStatement s = null;
+        String sql = """
+            UPDATE Titles
+            SET FLAGGED = TRUE, DATE_FLAGGED = ?, ISSUE_FLAGGED = ?
+            WHERE TITLEID = ?
+            """;
+        try {
+            s = conn.prepareStatement(sql);
+            s.setString(1, DateFormat.getDateInstance().format(today));
+            if (title.getIssueFlagged() == 0) {
+                s.setString(2, null);
+            } else {
+                s.setString(2, Integer.toString(title.getIssueFlagged()));
+            }
+            s.setString(3, Integer.toString(title.getId()));
+            s.executeUpdate();
+            s.close();
+        } catch (SQLException sqlExcept) {
+            sqlExcept.printStackTrace();
+        }
+        invalidateTitles();
+        this.loadReportsTab();
+        getDatabaseInfo();
+        System.out.println(title.getTitle() + " has been flagged and saved!");
+    }
+
+    @FXML
+    void unsaveThisFlag(Title title)
+    {
+        PreparedStatement s = null;
+        String sql = """
+                    UPDATE Titles
+                    SET FLAGGED = FALSE, ISSUE_FLAGGED = NULL
+                    WHERE TITLEID = ?
+                    """;
+        try {
+            s = conn.prepareStatement(sql);
+            s.setString(1, Integer.toString(title.getId()));
+            s.executeUpdate();
+            s.close();
+        } catch (SQLException sqlExcept) {
+            sqlExcept.printStackTrace();
+        }
+        invalidateTitles();
+        this.loadReportsTab();
+        getDatabaseInfo();
+        System.out.println(title.getTitle() + " has been UNflagged and saved!");
     }
 
     @FXML
