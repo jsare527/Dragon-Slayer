@@ -695,6 +695,7 @@ public class Controller implements Initializable {
         for (Title t: storedTitles)
         {
             Title copy = new Title(t.getId(), t.getTitle(), t.getPrice(), t.getNotes(), t.getProductId(), t.getDateCreated(), t.isFlagged(), t.getDateFlagged(), t.getIssueFlagged());
+            copy.setNoRequest(t.getNoRequest());
 
             copy.flaggedProperty().addListener((obs, wasFlagged, isFlagged) -> {
                 if (isFlagged) {
@@ -856,6 +857,17 @@ public class Controller implements Initializable {
         titleTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         titleTable.getItems().setAll(this.getTitles());
         titleTable.getSortOrder().add(titleTitleColumn);
+        titleTable.setRowFactory(title -> new TableRow<Title>() {
+            @Override
+            public void updateItem(Title t, boolean noRequests) {
+                //int numRequests = t == null ? 100 : getNumberRequests(t.getId());
+                if (t == null || !t.getNoRequest()) {
+                    setStyle("");
+                } else {
+                    setStyle("-fx-background-color: #f2e88a;");
+                }
+            }
+        });
 
         //Populate columns for flagged titles table in New Week Pulls Tab
         flaggedTitleColumn.setCellValueFactory(new PropertyValueFactory<>("flaggedTitleName"));
@@ -1321,6 +1333,13 @@ public class Controller implements Initializable {
                     } catch (SQLException sqlExcept) {
                         sqlExcept.printStackTrace();
                     }
+
+                    int numRequests = getNumberRequests(order.getTitleId());
+                    if (numRequests == 0)
+                    {
+                        titleTable.getItems().stream().filter(t -> t.getId() == (order.getTitleId())).findFirst().get().setNoRequest(true);
+                        titleTable.refresh();
+                    }
                 }
 
                 invalidateOrders();
@@ -1620,6 +1639,12 @@ public class Controller implements Initializable {
                         invalidateOrders();
                         updateOrdersTable(customerTable.getSelectionModel().getSelectedItem());
                         this.loadReportsTab();
+                        Title t = titleTable.getItems().stream().filter(tl -> tl.getId() == newOrderController.lastTitleAdded).findFirst().get();
+                        if (t.getNoRequest())
+                        {
+                            t.setNoRequest(false);
+                            titleTable.refresh();
+                        }
 
                         if (titleTable.getSelectionModel().getSelectedItem() != null) {
                             Title title = titleTable.getSelectionModel().getSelectedItem();
@@ -3323,7 +3348,9 @@ public class Controller implements Initializable {
         try
         {
             Statement s = conn.createStatement();
-            ResultSet results = s.executeQuery("select * from Titles order by UPPER(TITLE)");
+            ResultSet results = s.executeQuery("select TITLEID, TITLE, PRICE, NOTES, PRODUCTID, DATECREATED, FLAGGED, DATE_FLAGGED, ISSUE_FLAGGED, " +
+                    "case when exists (select 1 from ORDERS where TITLES.TITLEID=ORDERS.TITLEID) then 1 else 0 end as REQUESTS " +
+                    "from Titles order by UPPER(TITLE)");
 
             while(results.next())
             {
@@ -3336,14 +3363,19 @@ public class Controller implements Initializable {
                 boolean flagged = results.getBoolean("FLAGGED");
                 Date dateFlagged = results.getDate("DATE_FLAGGED");
                 int issueFlagged = results.getInt("ISSUE_FLAGGED");
+                boolean noRequest = results.getInt("REQUESTS") == 0;
                 if (dateFlagged != null) {
                     if (dateCreated == null) {
                         // TODO: Is something supposed to be here?
                     }
-                    storedTitles.add(new Title(titleId, title, price, notes, productId, (dateCreated == null ? null : dateCreated.toLocalDate()), flagged, dateFlagged.toLocalDate(), issueFlagged));
+                    Title t = new Title(titleId, title, price, notes, productId, (dateCreated == null ? null : dateCreated.toLocalDate()), flagged, dateFlagged.toLocalDate(), issueFlagged);
+                    t.setNoRequest(noRequest);
+                    storedTitles.add(t);
                 }
                 else {
-                    storedTitles.add(new Title(titleId, title, price, notes, productId, (dateCreated == null ? null : dateCreated.toLocalDate()), flagged, null, issueFlagged));
+                    Title t = new Title(titleId, title, price, notes, productId, (dateCreated == null ? null : dateCreated.toLocalDate()), flagged, null, issueFlagged);
+                    t.setNoRequest(noRequest);
+                    storedTitles.add(t);
                 }
             }
             results.close();
