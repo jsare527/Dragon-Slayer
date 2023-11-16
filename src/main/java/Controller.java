@@ -2707,8 +2707,6 @@ public class Controller implements Initializable {
     @FXML
     void handleTitleKeyboardInput(KeyEvent event)
     {
-        // System.out.println("Title keyboard input triggered: " + event.getCode().toString());
-
         if (event.isControlDown() && event.getCode() == KeyCode.F)
         {
             Scene scene = titleTable.getScene();
@@ -2737,6 +2735,17 @@ public class Controller implements Initializable {
         }
     }
 
+    @FXML
+    void handleTitleSearchDouble(MouseEvent event)
+    {
+        if (event.getClickCount() == 2) {
+            titleTable.getItems().setAll(getTitles());
+            //System.out.println("DOUBLE CLICK");
+        }
+
+
+    }
+
     @FXML 
     void handleTitleSearching(KeyEvent event)
     {
@@ -2753,7 +2762,7 @@ public class Controller implements Initializable {
         {
             titles = getTitles();
         }
-        else 
+        else
         {
             titles = titleTable.getItems().sorted(Comparator.comparing(Title::getTitle, String.CASE_INSENSITIVE_ORDER));
         }
