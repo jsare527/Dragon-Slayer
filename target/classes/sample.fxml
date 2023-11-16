@@ -399,6 +399,33 @@
                             </AnchorPane>
                         </content>
                     </Tab>
+                    <Tab text="File Location">
+                        <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <children>
+                                    <Text text="Set Default File Location Here:" AnchorPane.leftAnchor="12" AnchorPane.rightAnchor="5" AnchorPane.topAnchor="17" >
+                                        <font>
+                                            <Font name="SansSerif" size="18.0" />
+                                        </font>
+                                    </Text>
+                                    <TextField fx:id="DefaultFileLocation" layoutX="10.0" layoutY="44.0" onAction="#assignDefaultFileLocation" prefHeight="40.0" prefWidth="690.0" promptText="Example: C:\Users\Brandon\Documents\Exports Files\2023" />
+                                    <HBox spacing="10" alignment="bottom_right" layoutX="10.0" layoutY="90.0" >
+                                        <Button text="Assign" onAction="#assignDefaultFileLocation"/>
+                                    </HBox>
+                                    <Text fx:id="actiontarget" layoutY="107.0" layoutX="65.0">
+                                        <font>
+                                            <Font name="SansSerif" size="14.0" />
+                                        </font>
+                                    </Text>
+                                    <Text fx:id="currentDefaultLocation" layoutY="130.0" layoutX="10.0">
+                                        <font>
+                                            <Font name="SansSerif" size="14.0" />
+                                        </font>
+                                    </Text>
+                                </children>
+                            </AnchorPane>
+                        </content>
+                    </Tab>
                 </tabs>
             </TabPane>
         </content>
