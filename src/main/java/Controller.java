@@ -2766,7 +2766,6 @@ public class Controller implements Initializable {
     @FXML
     void handleTitleJumping(String keyword)
     {
-        System.out.println(keyword);
         ObservableList<Title> titles = titleTable.getItems();
         for (int i = 0; i < titles.size(); i++) {
             if (titles.get(i).getTitle().toLowerCase().startsWith(keyword)) {
