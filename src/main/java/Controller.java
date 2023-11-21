@@ -46,6 +46,14 @@ public class Controller implements Initializable {
     // Path to txt file saving last DB location. Reccommended to leave with program
     private final String LAST_DB_LOCATION_FILE_PATH = "lastDBconnection.txt";
 
+    //Bibash enumeration type
+    public enum CURRENT_PAGE {
+        TITLE,
+        CUSTOMER  ;
+    };
+
+    public CURRENT_PAGE currentPage;
+
     //#region Class Variables
 
     private boolean unsaved = false;
@@ -929,6 +937,10 @@ public class Controller implements Initializable {
 
         //Add Listener for selected Customer
         customerTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            //Bibash switch current view to customer page
+            Main.clearKeyword();
+            currentPage = CURRENT_PAGE.CUSTOMER;
+
             TableViewSelectionModel<Customer> model = customerTable.getSelectionModel();
             ObservableList<Customer> selectedCustomers = model.getSelectedItems();
             
@@ -998,7 +1010,11 @@ public class Controller implements Initializable {
         titleTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
             ObservableList<Title> selectedTitles = titleTable.getSelectionModel().getSelectedItems();
 
-            if (newSelection != null) 
+            //Bibash switch current view to TITLE page
+            Main.clearKeyword();
+            currentPage = CURRENT_PAGE.TITLE;
+
+            if (newSelection != null)
             {
                 if (selectedTitles.size() == 1)
                 {
@@ -2493,7 +2509,8 @@ public class Controller implements Initializable {
             LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
             int i = 4;
             for (Title title : titles) {
-                if (title.getDateFlagged() == null || title.getDateFlagged().isBefore(sixMonthsAgo)) {
+                if ((title.getDateFlagged() == null || title.getDateFlagged().isBefore(sixMonthsAgo)) && !(title.getDateCreated() !=null
+                        && title.getDateCreated().isAfter(sixMonthsAgo))) {
                     row = sheet.createRow(i);
 
                     cell = row.createCell(0);
@@ -2746,7 +2763,20 @@ public class Controller implements Initializable {
 
     }
 
-    @FXML 
+    @FXML
+    void handleTitleJumping(String keyword)
+    {
+        ObservableList<Title> titles = titleTable.getItems();
+        for (int i = 0; i < titles.size(); i++) {
+            if (titles.get(i).getTitle().toLowerCase().startsWith(keyword)) {
+                // Scroll to the matched cell
+                titleTable.scrollTo(i);
+                break;
+            }
+        }
+    }
+
+    @FXML
     void handleTitleSearching(KeyEvent event)
     {
         Scene scene = titleTable.getScene();
@@ -2762,7 +2792,7 @@ public class Controller implements Initializable {
         {
             titles = getTitles();
         }
-        else
+        else 
         {
             titles = titleTable.getItems().sorted(Comparator.comparing(Title::getTitle, String.CASE_INSENSITIVE_ORDER));
         }
@@ -2783,7 +2813,21 @@ public class Controller implements Initializable {
         titleTable.getItems().setAll(sortedTitles);
     }
 
-    @FXML 
+    @FXML
+        //Bibash method is called which searches through the list
+    void handleCustomerJumping(String keyword)
+    {
+        ObservableList<Customer> customers = customerTable.getItems();
+        for (int i = 0; i < customers.size(); i++) {
+            if (customers.get(i).getFullName().toLowerCase().startsWith(keyword)) {
+                // Scroll to the matched cell
+                customerTable.scrollTo(i);
+                break;
+            }
+        }
+    }
+
+    @FXML
     void handleCustomerSearching(KeyEvent event)
     {
         Scene scene = customerTable.getScene();
