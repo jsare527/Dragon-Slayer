@@ -1125,7 +1125,7 @@ public class Controller implements Initializable {
                 if (myReader.hasNextLine()) {
                     File path = new File(myReader.nextLine());
                     defaultFL = path;
-                    System.out.println(defaultFL.getPath());
+                    Log.LogEvent(defaultFL.getPath());
                     currentDefaultLocation.setText("The current default file location is: " + defaultFL.getPath());
                 }
                 myReader.close();
@@ -1701,22 +1701,22 @@ public class Controller implements Initializable {
         String pathString = DefaultFileLocation.getText();
         File temp = new File (pathString);
         if (temp.exists() && temp != null) {
-            actiontarget.setText("The default file was set to: " + temp.getPath());
+            actiontarget.setText("");
             defaultFL = temp;
             currentDefaultLocation.setText("The current default file location is: " + defaultFL.getPath());
             try {
                 File saver = new File(System.getProperty("user.home") + "/DragonSlayer/derbyDB/defaultFilePath.txt");
                 if(saver.createNewFile())
                 {
-                    System.out.println("File created: " + saver.getName());
+                    Log.LogEvent("File created: " + saver.getName());
                 }
                 else
                 {
-                    System.out.println("This file exists and was overwritten!");
+                    Log.LogEvent("This file exists and was overwritten!");
                 }
             }
             catch (IOException e) {
-                System.out.println("An error occurred.");
+                Log.LogEvent("An error occurred.");
                 e.printStackTrace();
             }
             try {
@@ -1725,7 +1725,7 @@ public class Controller implements Initializable {
                 myWriter.close();
             }
             catch (IOException e) {
-                System.out.println("An error occurred.");
+                Log.LogEvent("An error occurred.");
                 e.printStackTrace();
             }
         }
@@ -2739,7 +2739,7 @@ public class Controller implements Initializable {
         invalidateTitles();
         this.loadReportsTab();
         getDatabaseInfo();
-        System.out.println(title.getTitle() + " has been flagged and saved!");
+        Log.LogEvent(title.getTitle() + " has been flagged and saved!");
     }
 
     @FXML
@@ -2762,7 +2762,7 @@ public class Controller implements Initializable {
         invalidateTitles();
         this.loadReportsTab();
         getDatabaseInfo();
-        System.out.println(title.getTitle() + " has been UNflagged and saved!");
+        Log.LogEvent(title.getTitle() + " has been UNflagged and saved!");
     }
 
     @FXML
