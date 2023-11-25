@@ -183,7 +183,6 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <Button fx:id="saveFlagsButton" layoutX="269.0" layoutY="10.0" mnemonicParsing="false" onAction="#saveFlags" text="Save Flags" AnchorPane.leftAnchor="259.0" AnchorPane.topAnchor="10.0" />
                   <TextField layoutX="10.0" layoutY="43.0" prefHeight="26.0" prefWidth="490.0" promptText="Search..." />
                </children></AnchorPane>
       </content>
