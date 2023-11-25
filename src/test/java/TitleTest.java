@@ -113,7 +113,7 @@ public class TitleTest extends ApplicationTest {
 
         push(new KeyCodeCombination(KeyCode.M, KeyCodeCombination.CONTROL_DOWN));
 
-        clickOn("#saveFlagsButton");
+        //clickOn("#saveFlagsButton");
         //dumb workaround bc click on won't work right
         clickOn("#TitleSearch");
             write("Example Man");

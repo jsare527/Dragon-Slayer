@@ -2647,81 +2647,6 @@ public class Controller implements Initializable {
         Log.LogMessage("Flags Reset");
     }
 
-    /**
-     * Saves the current state and date of all New Release Flags to the database
-     */
-    @FXML
-    void saveFlags() {
-
-        ObservableList<Title> titles = titleTable.getItems();
-        ZonedDateTime startOfToday = LocalDate.now().atStartOfDay(ZoneId.systemDefault());
-        long todayMillis = startOfToday.toEpochSecond() * 1000;
-        Date today = new Date(todayMillis);
-
-        // Alert savingAlert = new Alert(Alert.AlertType.INFORMATION, "Saving New Release Flags...", ButtonType.OK);
-
-        // savingAlert.setTitle("Saving");
-        // savingAlert.setHeaderText("");
-        // savingAlert.setContentText("Saving New Release Flags...");
-        // savingAlert.getDialogPane().lookupButton(ButtonType.OK).setDisable(true);
-        // savingAlert.getDialogPane().getScene().getWindow().setOnCloseRequest(Event::consume);
-        // savingAlert.show();
-
-        for (int i = 0; i < titles.size(); i++) {
-            PreparedStatement s = null;
-            if (titles.get(i).isFlagged()) {
-                String sql = """
-                    UPDATE Titles
-                    SET FLAGGED = TRUE, DATE_FLAGGED = ?, ISSUE_FLAGGED = ?
-                    WHERE TITLEID = ?
-                    """;
-                try {
-                    s = conn.prepareStatement(sql);
-                    s.setString(1, DateFormat.getDateInstance().format(today));
-                    if (titles.get(i).getIssueFlagged() == 0) {
-                        s.setString(2, null);
-                    } else {
-                        s.setString(2, Integer.toString(titles.get(i).getIssueFlagged()));
-                    }
-                    s.setString(3, Integer.toString(titles.get(i).getId()));
-                    s.executeUpdate();
-                    s.close();
-                } catch (SQLException sqlExcept) {
-                    sqlExcept.printStackTrace();
-                }
-            }
-            else {
-                String sql = """
-                    UPDATE Titles
-                    SET FLAGGED = FALSE, ISSUE_FLAGGED = NULL
-                    WHERE TITLEID = ?
-                    """;
-                try {
-                    s = conn.prepareStatement(sql);
-                    s.setString(1, Integer.toString(titles.get(i).getId()));
-                    s.executeUpdate();
-                    s.close();
-                } catch (SQLException sqlExcept) {
-                    sqlExcept.printStackTrace();
-                }
-            }
-
-        }
-
-        // savingAlert.close();
-
-        Alert savedAlert = new Alert(Alert.AlertType.INFORMATION, "Saved Flags!", ButtonType.OK);
-        savedAlert.setHeaderText("");
-        savedAlert.show();
-        this.unsaved = false;
-
-        invalidateTitles();
-        titleTable.getItems().setAll(getTitles());
-        this.loadReportsTab();
-
-        Log.LogMessage("Flags Saved");
-    }
-
     @FXML
     void saveThisFlag(Title title)
     {
@@ -2820,8 +2745,6 @@ public class Controller implements Initializable {
                 title.setFlagged(!title.isFlagged());
             }
         }
-
-        
     }
 
     @FXML
@@ -2838,10 +2761,7 @@ public class Controller implements Initializable {
     {
         if (event.getClickCount() == 2) {
             titleTable.getItems().setAll(getTitles());
-            //System.out.println("DOUBLE CLICK");
         }
-
-
     }
 
     @FXML

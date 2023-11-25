@@ -346,7 +346,7 @@ public class StepDefinitions extends ApplicationTest {
         press(KeyCode.ENTER);
         release(KeyCode.ENTER);
         push(new KeyCodeCombination(KeyCode.M, KeyCodeCombination.CONTROL_DOWN));
-        clickOn("#saveFlagsButton");
+        //clickOn("#saveFlagsButton");
     }
 
     @When("I click release flags")
