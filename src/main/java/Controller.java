@@ -36,11 +36,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.Scanner;
 
 public class Controller implements Initializable {
 
@@ -1125,7 +1120,7 @@ public class Controller implements Initializable {
                 if (myReader.hasNextLine()) {
                     File path = new File(myReader.nextLine());
                     defaultFL = path;
-                    Log.LogEvent(defaultFL.getPath());
+                    Log.LogEvent("Current Default File Location" , defaultFL.getPath());
                     currentDefaultLocation.setText("The current default file location is: " + defaultFL.getPath());
                 }
                 myReader.close();
@@ -1708,15 +1703,15 @@ public class Controller implements Initializable {
                 File saver = new File(System.getProperty("user.home") + "/DragonSlayer/derbyDB/defaultFilePath.txt");
                 if(saver.createNewFile())
                 {
-                    Log.LogEvent("File created: " + saver.getName());
+                    Log.LogEvent("Default Location", "File created: " + saver.getName());
                 }
                 else
                 {
-                    Log.LogEvent("This file exists and was overwritten!");
+                    Log.LogEvent("Default File Location", "This file exists and was overwritten!");
                 }
             }
             catch (IOException e) {
-                Log.LogEvent("An error occurred.");
+                Log.LogEvent("Create Default File Location", "An error occurred.");
                 e.printStackTrace();
             }
             try {
@@ -1725,7 +1720,7 @@ public class Controller implements Initializable {
                 myWriter.close();
             }
             catch (IOException e) {
-                Log.LogEvent("An error occurred.");
+                Log.LogEvent("Assign Default File Location", "An error occurred.");
                 e.printStackTrace();
             }
         }
@@ -2739,7 +2734,7 @@ public class Controller implements Initializable {
         invalidateTitles();
         this.loadReportsTab();
         getDatabaseInfo();
-        Log.LogEvent(title.getTitle() + " has been flagged and saved!");
+        Log.LogEvent("Save Flag", title.getTitle() + " has been flagged and saved!");
     }
 
     @FXML
@@ -2762,7 +2757,7 @@ public class Controller implements Initializable {
         invalidateTitles();
         this.loadReportsTab();
         getDatabaseInfo();
-        Log.LogEvent(title.getTitle() + " has been UNflagged and saved!");
+        Log.LogEvent("Unsave Flag", title.getTitle() + " has been UNflagged and saved!");
     }
 
     @FXML
@@ -2793,8 +2788,6 @@ public class Controller implements Initializable {
     @FXML
     void handleTitleKeyboardInput(KeyEvent event)
     {
-        // System.out.println("Title keyboard input triggered: " + event.getCode().toString());
-
         if (event.isControlDown() && event.getCode() == KeyCode.F)
         {
             Scene scene = titleTable.getScene();
@@ -2823,6 +2816,17 @@ public class Controller implements Initializable {
         }
     }
 
+    @FXML
+    void handleTitleSearchDouble(MouseEvent event)
+    {
+        if (event.getClickCount() == 2) {
+            titleTable.getItems().setAll(getTitles());
+            //System.out.println("DOUBLE CLICK");
+        }
+
+
+    }
+
     @FXML 
     void handleTitleSearching(KeyEvent event)
     {
@@ -2839,7 +2843,7 @@ public class Controller implements Initializable {
         {
             titles = getTitles();
         }
-        else 
+        else
         {
             titles = titleTable.getItems().sorted(Comparator.comparing(Title::getTitle, String.CASE_INSENSITIVE_ORDER));
         }
