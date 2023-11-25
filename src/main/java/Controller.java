@@ -57,6 +57,7 @@ public class Controller implements Initializable {
     //#region Class Variables
 
     private boolean unsaved = false;
+    private File defaultFL;
 
     @FXML private TableView<Customer> customerTable;
     @FXML private TableColumn<Customer, String> customerLastNameColumn;
@@ -137,6 +138,10 @@ public class Controller implements Initializable {
     @FXML private Text RequestQuantityText;
     @FXML private Text RequestNumCustomersText;
 
+    @FXML private TextField DefaultFileLocation;
+    @FXML private Text actiontarget;
+    @FXML private Text currentDefaultLocation;
+
     @FXML private TabPane tabsPane;
     @FXML private TextArea databaseOverview;
 
@@ -146,6 +151,7 @@ public class Controller implements Initializable {
 
     private static Connection conn = null;
     private Settings settings;
+
 
     // private boolean setAll;
     //#endregion
@@ -1122,6 +1128,33 @@ public class Controller implements Initializable {
                 getDatabaseInfo();
             }
         });
+        try {
+            File myObj = new File(System.getProperty("user.home") + "/DragonSlayer/derbyDB/defaultFilePath.txt");
+            if (!myObj.createNewFile())
+            {
+                Scanner myReader = new Scanner(myObj);
+                if (myReader.hasNextLine()) {
+                    File path = new File(myReader.nextLine());
+                    defaultFL = path;
+                    Log.LogEvent("Assign Default File Location", defaultFL.getPath());
+                    currentDefaultLocation.setText("The current default file location is: " + defaultFL.getPath());
+                }
+                myReader.close();
+            }
+            else
+            {
+                currentDefaultLocation.setText("There is not a current file path.");
+            }
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+
     }
 
     //#endregion
@@ -1674,6 +1707,44 @@ public class Controller implements Initializable {
         }
     }
 
+    @FXML
+    void assignDefaultFileLocation(ActionEvent event) {
+        String pathString = DefaultFileLocation.getText();
+        File temp = new File (pathString);
+        if (temp.exists() && temp != null) {
+            actiontarget.setText("");
+            defaultFL = temp;
+            currentDefaultLocation.setText("The current default file location is: " + defaultFL.getPath());
+            try {
+                File saver = new File(System.getProperty("user.home") + "/DragonSlayer/derbyDB/defaultFilePath.txt");
+                if(saver.createNewFile())
+                {
+                    Log.LogEvent("Create Default File Location", "File created: " + saver.getName());
+                }
+                else
+                {
+                    Log.LogEvent("Create Default File Location","This file exists and was overwritten!");
+                }
+            }
+            catch (IOException e) {
+                Log.LogEvent("Create Default File Location","An error occurred.");
+                e.printStackTrace();
+            }
+            try {
+                FileWriter myWriter = new FileWriter(System.getProperty("user.home") + "/DragonSlayer/derbyDB/defaultFilePath.txt");
+                myWriter.write(defaultFL.getPath());
+                myWriter.close();
+            }
+            catch (IOException e) {
+                Log.LogEvent("Create Default File Location","An error occurred.");
+                e.printStackTrace();
+            }
+        }
+        else {
+            actiontarget.setText("The file path " + temp.getPath() + " does not exist!");
+        }
+    }
+
     /**
      * Creates a report that organizes all customer requests by title. Writes every title with customer request
      * information underneath to an Excel spreadsheet.
@@ -1687,6 +1758,7 @@ public class Controller implements Initializable {
         String fileName = "All Customer Requests by Title " + today + ".xlsx";
 
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(defaultFL);
         fileChooser.setTitle("Export Location");
         fileChooser.setInitialFileName(fileName);
         File file = fileChooser.showSaveDialog(((Node) event.getTarget()).getScene().getWindow());
@@ -1731,6 +1803,7 @@ public class Controller implements Initializable {
         String fileName = "All Titles " + today + ".xlsx";
 
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(defaultFL);
         fileChooser.setTitle("Export Location");
         fileChooser.setInitialFileName(fileName);
         File file = fileChooser.showSaveDialog(((Node) event.getTarget()).getScene().getWindow());
@@ -1865,6 +1938,7 @@ public class Controller implements Initializable {
         String fileName = "Customer List " + today + ".xlsx";
 
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(defaultFL);
         fileChooser.setTitle("Export Location");
         fileChooser.setInitialFileName(fileName);
         File file = fileChooser.showSaveDialog(((Node) event.getTarget()).getScene().getWindow());
@@ -1973,6 +2047,7 @@ public class Controller implements Initializable {
         String fileName = "All Flagged Titles " + today + ".xlsx";
 
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(defaultFL);
         fileChooser.setTitle("Export Location");
         fileChooser.setInitialFileName(fileName);
         File file = fileChooser.showSaveDialog(((Node) event.getTarget()).getScene().getWindow());
@@ -2023,6 +2098,7 @@ public class Controller implements Initializable {
         String fileName = "Zero Request Titles " + today + ".xlsx";
 
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(defaultFL);
         fileChooser.setTitle("Export Location");
         fileChooser.setInitialFileName(fileName);
         File file = fileChooser.showSaveDialog(((Node) event.getTarget()).getScene().getWindow());
@@ -2094,6 +2170,7 @@ public class Controller implements Initializable {
         String fileName = "Pending Issue Requests " + today + ".xlsx";
 
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(defaultFL);
         fileChooser.setTitle("Export Location");
         fileChooser.setInitialFileName(fileName);
         File file = fileChooser.showSaveDialog(((Node) event.getTarget()).getScene().getWindow());
@@ -2240,6 +2317,7 @@ public class Controller implements Initializable {
         String fileName = customer.getFullName() + " Requests " + today + ".xlsx";
 
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(defaultFL);
         fileChooser.setTitle("Export Location");
         fileChooser.setInitialFileName(fileName);
         File file = fileChooser.showSaveDialog(((Node) event.getTarget()).getScene().getWindow());
@@ -2373,6 +2451,7 @@ public class Controller implements Initializable {
             String fileName = title.getTitle() + " Requests " + today + ".xlsx";
 
             FileChooser fileChooser = new FileChooser();
+            fileChooser.setInitialDirectory(defaultFL);
             fileChooser.setTitle("Export Location");
             fileChooser.setInitialFileName(fileName);
             File file = fileChooser.showSaveDialog(((Node) event.getTarget()).getScene().getWindow());
@@ -2422,6 +2501,7 @@ public class Controller implements Initializable {
             String fileName = title.getTitle() + " Requests " + today + ".xlsx";
 
             FileChooser fileChooser = new FileChooser();
+            fileChooser.setInitialDirectory(defaultFL);
             fileChooser.setTitle("Export Location");
             fileChooser.setInitialFileName(fileName);
             File file = fileChooser.showSaveDialog(((Node) event.getTarget()).getScene().getWindow());
@@ -2461,6 +2541,7 @@ public class Controller implements Initializable {
         String fileName = "Stalled Titles " + today + ".xlsx";
 
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(defaultFL);
         fileChooser.setTitle("Export Location");
         fileChooser.setInitialFileName(fileName);
         File file = fileChooser.showSaveDialog(((Node) event.getTarget()).getScene().getWindow());
@@ -2670,7 +2751,7 @@ public class Controller implements Initializable {
         invalidateTitles();
         this.loadReportsTab();
         getDatabaseInfo();
-        System.out.println(title.getTitle() + " has been flagged and saved!");
+        Log.LogEvent("Save Flag",title.getTitle() + " has been flagged and saved!");
     }
 
     @FXML
@@ -2693,7 +2774,7 @@ public class Controller implements Initializable {
         invalidateTitles();
         this.loadReportsTab();
         getDatabaseInfo();
-        System.out.println(title.getTitle() + " has been UNflagged and saved!");
+        Log.LogEvent("Remove Save Flag", title.getTitle() + " has been UNflagged and saved!");
     }
 
     @FXML
