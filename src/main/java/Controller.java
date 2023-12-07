@@ -26,6 +26,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.zeroturnaround.zip.ZipUtil;
 
 import java.io.*;
 import java.net.URL;
@@ -2614,6 +2615,19 @@ public class Controller implements Initializable {
 
             saveReport(file, workbook);
         }
+    }
+
+    @FXML
+    void handleExportBackup(ActionEvent event) {
+        LocalDate today = LocalDate.now();
+        String zipName = "DerbyDB_" + today + ".zip";
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(defaultFL);
+        fileChooser.setTitle("Export Location");
+        fileChooser.setInitialFileName(zipName);
+        File file = fileChooser.showSaveDialog(((Node) event.getTarget()).getScene().getWindow());
+        String folderPath = settings.getSetting("dbLocation");
+        ZipUtil.pack(new File(folderPath), file);
     }
 
   
