@@ -12,7 +12,7 @@ var searchData=
   ['testzeletingtitle_9',['testZeletingTitle',['../class_title_test.html#ab75fd2eb21de6b688dd666402c448c44',1,'TitleTest']]],
   ['timer_10',['Timer',['../class_timer.html',1,'']]],
   ['timer_2ejava_11',['Timer.java',['../_timer_8java.html',1,'']]],
-  ['title_12',['title',['../class_title.html#a6198907afedaed810135fab243abe24e',1,'Title.Title(int id, String title, int price, String notes, String productId, LocalDate dateCreated, boolean flagged, LocalDate dateFlagged, int issueFlagged)'],['../class_title.html#a81ffb11d95b2b0668fff88a33e438738',1,'Title.Title(int id, String title, int price, String notes, String productId, LocalDate dateCreated)'],['../class_title.html',1,'Title']]],
+  ['title_12',['title',['../class_title.html',1,'Title'],['../class_title.html#a6198907afedaed810135fab243abe24e',1,'Title.Title(int id, String title, int price, String notes, String productId, LocalDate dateCreated, boolean flagged, LocalDate dateFlagged, int issueFlagged)'],['../class_title.html#a81ffb11d95b2b0668fff88a33e438738',1,'Title.Title(int id, String title, int price, String notes, String productId, LocalDate dateCreated)'],['../enum_controller_1_1_c_u_r_r_e_n_t___p_a_g_e.html#a80df1093b49209c8989f99e98b79fc81',1,'Controller.CURRENT_PAGE.TITLE']]],
   ['title_2ejava_13',['Title.java',['../_title_8java.html',1,'']]],
   ['titles_14',['titles',['../class_step_definitions.html#a277615145356ffb36d59551d6dd06df1',1,'StepDefinitions']]],
   ['titletest_15',['TitleTest',['../class_title_test.html',1,'']]],
