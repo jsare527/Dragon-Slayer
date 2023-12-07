@@ -17,7 +17,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<TabPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
+<TabPane fx:id="tabsPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller">
   <tabs>
     <Tab text="Customers">
          <content>
@@ -156,15 +156,15 @@
                   </TableView>
                   <VBox alignment="CENTER" prefHeight="749.0" prefWidth="476.0" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
                      <children>
-                        <GridPane onMouseClicked="#passTitleKeyboardFocus" prefHeight="172.0" prefWidth="476.0">
+                        <GridPane onMouseClicked="#passTitleKeyboardFocus" prefHeight="300.0" prefWidth="476.0">
                            <columnConstraints>
-                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="120.0" />
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                               <ColumnConstraints />
                            </columnConstraints>
                            <rowConstraints>
                               <RowConstraints maxHeight="33.0" minHeight="0.0" prefHeight="33.0" vgrow="SOMETIMES" />
-                              <RowConstraints maxHeight="67.0" minHeight="0.0" prefHeight="33.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="200.0" minHeight="0.0" prefHeight="33.0" vgrow="SOMETIMES" />
                               <RowConstraints maxHeight="134.0" minHeight="10.0" prefHeight="29.0" vgrow="SOMETIMES" />
                               <RowConstraints maxHeight="67.0" minHeight="33.0" prefHeight="33.0" vgrow="SOMETIMES" />
                               <RowConstraints maxHeight="200.0" minHeight="10.0" prefHeight="25.0" vgrow="SOMETIMES" />
@@ -178,7 +178,7 @@
                               <Text fill="#666666" strokeType="OUTSIDE" strokeWidth="0.0" text="Price:" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                               <Text fill="#666666" strokeType="OUTSIDE" strokeWidth="0.0" text="Date Created:" underline="true" GridPane.rowIndex="5" />
                               <Text fill="#666666" strokeType="OUTSIDE" strokeWidth="0.0" text="Special Order Notes:" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <Text fx:id="titleTitleText" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.rowIndex="2" />
+                              <Text fx:id="titleTitleText" wrappingWidth="130" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.rowIndex="2" />
                               <Text fx:id="titleProductIdText" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.rowIndex="4" />
                               <Text fx:id="titlePriceText" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <Text fx:id="titleDateCreatedText" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.rowIndex="6" />
@@ -219,15 +219,10 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <TextField fx:id="TitleSearch" layoutX="10.0" layoutY="44.0" onKeyReleased="#handleTitleSearching" prefHeight="26.0" prefWidth="690.0" promptText="Search..." />
+                  <TextField fx:id="TitleSearch" layoutX="10.0" layoutY="44.0" onKeyReleased="#handleTitleSearching" onMouseClicked="#handleTitleSearchDouble" prefHeight="26.0" prefWidth="690.0" promptText="Search..." />
                   <HBox alignment="CENTER_LEFT" layoutX="10.0" layoutY="10.0" nodeOrientation="LEFT_TO_RIGHT" onMouseClicked="#passTitleKeyboardFocus" prefHeight="30.0" prefWidth="690.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
                      <children>
                         <Button fx:id="addTitleButtonMain" mnemonicParsing="false" onAction="#handleAddTitle" prefWidth="94.0" text="Add New Title" />
-                        <Button fx:id="saveFlagsButton" mnemonicParsing="false" onAction="#saveFlags" prefWidth="77.0" text="Save Flags">
-                           <HBox.margin>
-                              <Insets left="5.0" />
-                           </HBox.margin>
-                        </Button>
                         <Button fx:id="resetFlagsButton" mnemonicParsing="false" onAction="#resetFlags" prefWidth="154.0" text="Reset New Release Flags">
                            <HBox.margin>
                               <Insets left="5.0" />
@@ -235,7 +230,7 @@
                         </Button>
                         <Button fx:id="editTitleButton" mnemonicParsing="false" onAction="#handleEditTitle" prefWidth="60.0" text="Edit">
                            <HBox.margin>
-                              <Insets left="230.0" />
+                              <Insets left="235.0" />
                            </HBox.margin>
                         </Button>
                         <Button fx:id="deleteTitleButton" mnemonicParsing="false" onAction="#handleDeleteTitle" prefWidth="60.0" text="Delete">
@@ -277,7 +272,7 @@
                                                     <Text fx:id="FlaggedTitlesTotalText" strokeType="OUTSIDE" strokeWidth="0.0" />
                                                     <Text fill="#666666" strokeType="OUTSIDE" strokeWidth="0.0" text="Titles Currently Flagged For" underline="true" wrappingWidth="156.62060546875" GridPane.columnIndex="1" />
                                                     <Text fx:id="FlaggedTitlesTotalCustomersText" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.rowIndex="1" />
-                                                    <Text fill="#666666" strokeType="OUTSIDE" strokeWidth="0.0" text="Customers" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                                    <Text fill="#666666" strokeType="OUTSIDE" strokeWidth="0.0" text="Total Customers" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                                     <Text fx:id="FlaggedIssueNumbersText" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.rowIndex="2" />
                                                     <Text fill="#666666" strokeType="OUTSIDE" strokeWidth="0.0" text="Titles Have Triggered Issue #'s" underline="true" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                                     <Text fx:id="FlaggedNoRequestsText" strokeType="OUTSIDE" strokeWidth="0.0" GridPane.rowIndex="3" />
@@ -374,8 +369,9 @@
                                                     <Button mnemonicParsing="false" onAction="#handleExportPendingIssueNumbers" prefWidth="166.0" text="All Pending Issue #'s" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
                                                     <Button mnemonicParsing="false" onAction="#handleExportStalledTitles" prefWidth="166.0" text="Stalled Titles" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
                                                     <Button mnemonicParsing="false" onAction="#handleExportNoRequestTitles" prefWidth="166.0" text="Titles With 0 Requests" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
-                                          <Button mnemonicParsing="false" onAction="#handleExportAllTitles" prefWidth="166.0" text="All Titles with Qtys" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
-                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Exports" textAlignment="CENTER" GridPane.columnSpan="2" GridPane.halignment="CENTER">
+                                                    <Button mnemonicParsing="false" onAction="#handleExportAllTitles" prefWidth="166.0" text="All Titles with Qtys" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                                                    <Button mnemonicParsing="false" onAction="#handleExportBackup" prefHeight="26.0" prefWidth="166.0" text="Backup" GridPane.halignment="CENTER" GridPane.rowIndex="4" />
+                                           <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Exports" textAlignment="CENTER" GridPane.columnSpan="2" GridPane.halignment="CENTER">
                                              <font>
                                                 <Font name="SansSerif Bold Italic" size="14.0" />
                                              </font>
@@ -395,6 +391,33 @@
                                             <TableColumn fx:id="breakdownFlaggedColumn" prefWidth="182.33755493164062" text="Flagged in Last 6 Months" />
                                         </columns>
                                     </TableView>
+                                </children>
+                            </AnchorPane>
+                        </content>
+                    </Tab>
+                    <Tab text="File Location">
+                        <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                <children>
+                                    <Text text="Set Default File Location Here:" AnchorPane.leftAnchor="12" AnchorPane.rightAnchor="5" AnchorPane.topAnchor="17" >
+                                        <font>
+                                            <Font name="SansSerif" size="18.0" />
+                                        </font>
+                                    </Text>
+                                    <TextField fx:id="DefaultFileLocation" layoutX="10.0" layoutY="44.0" onAction="#assignDefaultFileLocation" prefHeight="40.0" prefWidth="690.0" promptText="Example: C:\Users\Brandon\Documents\Exports Files\2023" />
+                                    <HBox spacing="10" alignment="bottom_right" layoutX="10.0" layoutY="90.0" >
+                                        <Button text="Assign" onAction="#assignDefaultFileLocation"/>
+                                    </HBox>
+                                    <Text fx:id="actiontarget" layoutY="107.0" layoutX="65.0">
+                                        <font>
+                                            <Font name="SansSerif" size="14.0" />
+                                        </font>
+                                    </Text>
+                                    <Text fx:id="currentDefaultLocation" layoutY="130.0" layoutX="10.0">
+                                        <font>
+                                            <Font name="SansSerif" size="14.0" />
+                                        </font>
+                                    </Text>
                                 </children>
                             </AnchorPane>
                         </content>

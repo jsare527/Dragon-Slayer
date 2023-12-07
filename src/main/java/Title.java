@@ -19,6 +19,7 @@ public class Title {
     private BooleanProperty flagged;
     private LocalDate dateFlagged;
     private int issueFlagged;
+    private boolean noRequest;
 
     /**
      * Constructor. Creates a Title with the specified properties
@@ -222,4 +223,14 @@ public class Title {
      */
     public void setIssueFlagged(int issueFlagged) { this.issueFlagged = issueFlagged; }
 
+    public void setNoRequest(boolean noRequest) { this.noRequest = noRequest; }
+
+    public boolean getNoRequest() {return this.noRequest; }
+
+    public boolean equals(Title t)
+    {
+        return this.title.equals(t.getTitle()) && this.price == t.getPrice()
+                && this.notes.equals(t.getNotes()) && this.productId.equals(t.getProductId())
+                && this.dateCreated.equals(t.getDateCreated());
+    }
 }

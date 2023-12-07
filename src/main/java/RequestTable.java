@@ -57,4 +57,14 @@ public class RequestTable {
      * @return the issue of the title of the customer's order
      */
     public void setRequestIssue(int issue) { this.requestIssue = issue; }
+
+    public int getIssue() { return requestIssue; }
+
+    public int getQuantity() { return requestQuantity; }
+
+    public boolean equals(RequestTable t)
+    {
+        return this.requestFirstName.equals(t.getRequestFirstName()) && this.requestLastName.equals(t.getRequestLastName())
+                && this.requestIssue == t.getIssue() && this.requestQuantity == t.getQuantity();
+    }
 }
