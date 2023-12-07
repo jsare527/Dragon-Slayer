@@ -1,5 +1,5 @@
 # DragonSlayer Pull List Program
-Capstone Project UNO 2022
+Capstone Project UNO 2023
 
 # How to use
 
@@ -13,13 +13,18 @@ The DragonSlayer program is used to maintain a comic book store Pull List. Custo
 **dev branch:**
 - This is the branch used for development and holds the current updates to be tested by the group.
   - Updated 9/28/2023 with the fix for inconsistent search and a testing framework for customers, titles, and orders
+  - Updated 10/10/2023 with the fix for performance issues
 
 # Release Notes
 
-**RELEASE NOTES 2.01a (TBD)**
-- Will be updated after release
+**RELEASE NOTES 2.01a (Planned - 10.31.23)**
 
-  
+- Fix for Performance Issues (Complete)
+- Fix for Inconsistent Customer Lists (Complete)
+- Fix for Automatically Saving Flags (PR Created)
+- Fix Case Sensitive Searches (In Testing)
+- Fix for Stalled Titles Report (In Testing)
+- Fix for Details Formatting (In Testing)
 
 **RELEASE NOTES 1.01d (12.10.2022)**
 
