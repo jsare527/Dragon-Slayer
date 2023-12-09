@@ -1,6 +1,6 @@
 Feature: Titles
   Test functionality of titles tab
-  Note: This feature is meant to be run with an empty database
+  Note: For best testing, uncomment emptyDB in setup and teardown
 
   Scenario: Create, Edit, and Delete a Title
     When I click on Titles tab
@@ -137,7 +137,6 @@ Feature: Titles
       | Joker     | 13          | 10.00       |           |
       | Superman  | 10          | 12.10       |           |
     When I flag title: "Batman"
-    Then I should see and close message: "Message"
     Then I should see title is flagged: "Batman"
     When I click release flags
     Then I should see and close message: "Confirmation"

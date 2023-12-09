@@ -38,11 +38,12 @@ public class StepDefinitions extends ApplicationTest {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("sample.fxml"));
         fxmlLoader.load();
         controller = fxmlLoader.getController();
-        controller.emptyDB();
+        //controller.emptyDB();
     }
 
     @After
     public void tearDown () throws Exception {
+        //controller.emptyDB();
         FxToolkit.hideStage();
         release(new KeyCode[]{});
         release(new MouseButton[]{});

@@ -1,6 +1,6 @@
 Feature: Customers
   Test functionality of customers tab
-  Note: This feature is meant to be run with an empty database
+  Note: For best testing, uncomment emptyDB in setup and teardown
 
   Scenario: Create, Edit, and Delete One Customer
     When I click on Customers tab

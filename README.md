@@ -12,19 +12,25 @@ The DragonSlayer program is used to maintain a comic book store Pull List. Custo
   
 **dev branch:**
 - This is the branch used for development and holds the current updates to be tested by the group.
-  - Updated 9/28/2023 with the fix for inconsistent search and a testing framework for customers, titles, and orders
-  - Updated 10/10/2023 with the fix for performance issues
+
+**mainV2 branch:**
+- This is the branch which holds the DragonSlayerV2 code.
 
 # Release Notes
 
-**RELEASE NOTES 2.01a (Planned - 10.31.23)**
-
-- Fix for Performance Issues (Complete)
-- Fix for Inconsistent Customer Lists (Complete)
-- Fix for Automatically Saving Flags (PR Created)
-- Fix Case Sensitive Searches (In Testing)
-- Fix for Stalled Titles Report (In Testing)
-- Fix for Details Formatting (In Testing)
+**RELEASE NOTES 2.01**
+- Performance: Improve time it takes to save flags or perform updates
+- Save Flags: Flags automatically save and remain saved
+- Search: Fix inconsistent customer lists
+- Search: Remove case sensitive issues when searching or sorting by title
+- Details: Formatting problem with title overlapping with last flagged date with long titles
+- Search: Be able to search by product id within titles field
+- Search: Highlight titles which have 0 associated customers
+- Search: New search with each input
+- Reports: Update report for items which have not been flagged in 6 months but were created in those 6 months
+- Search: Be able to scroll down to an item by highlighting a title and starting to type
+- Reports: Remember last saved location for reports
+- Backup: Create a backup option
 
 **RELEASE NOTES 1.01d (12.10.2022)**
 

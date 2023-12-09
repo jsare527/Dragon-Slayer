@@ -1,6 +1,7 @@
 Feature: Customers
   Test functionality of orders in the customer and titles tabs
-  Note: This feature is meant to be run with an empty database
+  Note: For best testing, uncomment emptyDB in setup and teardown
+  Note 2: Does not currently work due to selection problems
 
   Scenario: Create, Edit, and Delete a Customer Order
     When I click on Customers tab
