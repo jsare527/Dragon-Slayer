@@ -1,9 +1,9 @@
-Feature: Customers
-  Test functionality of customers tab
-  Note: This feature is meant to be run with an empty database
+Feature: Reports
+  Test functionality of reports tab
+  Note: For best testing, uncomment emptyDB in setup and teardown
+  Note 2: Does not work currently due to db problems
 
   Scenario: Test Viewing Monthly Breakdown
-    Note: This is has to be run with emptyDB() and has to be run twice
     Given Customers
       |  firstName   |  lastName   |   phone      |  email            |  notes   |
       | Zach         | Cart        | 581-237-9918 | zachCart@max.com  | Weirdo   |
