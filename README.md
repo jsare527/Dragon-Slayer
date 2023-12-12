@@ -16,21 +16,34 @@ The DragonSlayer program is used to maintain a comic book store Pull List. Custo
 **mainV2 branch:**
 - This is the branch which holds the DragonSlayerV2 code.
 
-# Release Notes
+# Release Notes - Dragon Slayer V3
 
 **RELEASE NOTES 2.01**
-- Performance: Improve time it takes to save flags or perform updates
-- Save Flags: Flags automatically save and remain saved
-- Search: Fix inconsistent customer lists
-- Search: Remove case sensitive issues when searching or sorting by title
-- Details: Formatting problem with title overlapping with last flagged date with long titles
-- Search: Be able to search by product id within titles field
-- Search: Highlight titles which have 0 associated customers
-- Search: New search with each input
-- Reports: Update report for items which have not been flagged in 6 months but were created in those 6 months
-- Search: Be able to scroll down to an item by highlighting a title and starting to type
-- Reports: Remember last saved location for reports
-- Backup: Create a backup option
+
+*Code Milestone 1 (9.28.2023)*
+  - Search: Fix inconsistent customer lists
+  - Added Cucumber testing framework
+
+*Code Milestone 2 (10.19.23)*
+  - Performance: Improve time it takes to save flags or perform updates
+
+*Code Milestone 3 (11.2.2023)*
+  - Search: Remove case sensitive issues when searching or sorting by title
+  - Details: Formatting problem with title overlapping with last flagged date with long titles
+  - Search: Be able to search by product id within titles field
+  - Save Flags: Flags automatically save and remain saved
+
+*Code Milestone 4 (11.15.2023)*
+  - Search: Highlight titles which have 0 associated customers
+  - Search: New search with each input
+
+*Code Milestone 5 (12.8.2023)*
+  - Reports: Update report for items which have not been flagged in 6 months but were created in those 6 months
+  - Search: Be able to scroll down to an item by highlighting a title and starting to type
+  - Reports: Remember last saved location for reports
+  - Backup: Create a backup option
+
+# Release Notes - Dragon Slayer V2
 
 **RELEASE NOTES 1.01d (12.10.2022)**
 
