@@ -27,6 +27,7 @@ public class NewOrderController implements Initializable{
     public int lastTitleAdded;
     private Connection conn;
     private int customerId;
+    private String customer;
 
     @FXML private Button addOrderButton;
     @FXML private ComboBox<String> setTitle;
@@ -76,7 +77,7 @@ public class NewOrderController implements Initializable{
         else {
             int titleID = getChoice(setTitle);
             String issue = setIssue.getText();
-            if (issue == "") {
+            if (issue.isBlank()) {
                 issue = null;
             }
             String quantity = setQuantity.getText();
@@ -108,7 +109,7 @@ public class NewOrderController implements Initializable{
                 s.setString(1, Integer.toString(customerId));
                 s.setString(2, Integer.toString(titleID));
                 s.setString(3, quantity);
-                s.setObject(4, issue, Types.INTEGER);
+                s.setObject(4, issue == null ? issue : Integer.valueOf(setIssue.getText()), Types.INTEGER);
 
 
                 int rowsAffected = s.executeUpdate();
@@ -122,8 +123,10 @@ public class NewOrderController implements Initializable{
 
                 orderWasAdded = true;
                 lastTitleAdded = titleID;
-                Log.LogEvent("New Order", "Added order - CustomerID: " + customerId + " - Title: " + FxUtilTest.getComboBoxValue(setTitle) + " - Quantity: " + quantity + " - Issue: " + (issue == null ? null : Integer.valueOf(issue)));
+
+                Log.LogEvent("New Order", "Added order - Customer: " + customer + " - Title: " + FxUtilTest.getComboBoxValue(setTitle) + " - Quantity: " + quantity + " - Issue: " + (issue == null ? null : Integer.valueOf(issue)));
             } catch (SQLException sqlExcept) {
+                Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                 sqlExcept.printStackTrace();
             }
         }
@@ -156,6 +159,14 @@ public class NewOrderController implements Initializable{
      */
     public void setCustomerID(int id) {
         this.customerId = id;
+    }
+
+    /**
+     * Sets the customer for this controller
+     * @param customer name of the customer to set
+     */
+    public void setCustomer(String customer) {
+        this.customer = customer;
     }
 
     /**

@@ -71,6 +71,7 @@ public class EditTitleController{
             }
             catch (SQLException sqlExcept)
             {
+                Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Database error. This is either a bug, or you messed with the DragonSlayer/derbyDB folder.", ButtonType.OK);
                 alert.setTitle("Database Error");
                 alert.setHeaderText("");
@@ -125,7 +126,7 @@ public class EditTitleController{
      * @return An integer representing the number of cents
      */
     private String dollarsToCents(String priceDollars) {
-        if (priceDollars == "") {
+        if (priceDollars.isBlank()) {
             return null;
         }
         priceDollars = priceDollars.replace(".", "");

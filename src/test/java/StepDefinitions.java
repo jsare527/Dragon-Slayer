@@ -688,7 +688,7 @@ public class StepDefinitions extends ApplicationTest {
     }
 
     private String dollarsToCents(String priceDollars) {
-        if (priceDollars == "") {
+        if (priceDollars.isBlank()) {
             return null;
         }
         priceDollars = priceDollars.replace(".", "");
