@@ -97,10 +97,11 @@ public class NewCustomerController implements Initializable {
             insert.close();
 
             customerWasAdded = true;
-            Log.LogEvent("User Added", "Added User - " + firstName + " " + lastName + " - phone: " + phone + " - email: " + email + " - notes:" + notes);
+            Log.LogEvent("Customer Added", "Added Customer - " + firstName + " " + lastName + " - phone: " + phone + " - email: " + email + " - notes:" + notes);
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Database error. This is either a bug, or you messed with the DragonSlayer/derbyDB folder.", ButtonType.OK);
             alert.setTitle("Database Error");
             alert.setHeaderText("");

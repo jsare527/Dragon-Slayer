@@ -90,6 +90,7 @@ public class CreateDB {
 //                }
 //            }
         } catch (SQLException sqle) {
+            Log.LogEvent("SQL Exception", sqle.getMessage());
             sqle.printStackTrace();
         }
 //        finally {
