@@ -107,6 +107,7 @@ public class EditOrderController {
                                         + (issue == null ? null : Integer.valueOf(issue))
                                         + " - Previous Title: " + prevTitle + " - Previous Quantity: " + prevQuantity + " - Previous Issue: " + prevIssue);
             } catch (SQLException sqlExcept) {
+                Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                 sqlExcept.printStackTrace();
             }
         }

@@ -173,6 +173,7 @@ public class Controller implements Initializable {
                 System.out.println("Customer table already contains Notes");
             }
             else {
+                Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                 sqlExcept.printStackTrace();
                 return false;
             }
@@ -187,6 +188,7 @@ public class Controller implements Initializable {
                 System.out.println("Titles table already contains ProductId");
             }
             else {
+                Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                 sqlExcept.printStackTrace();
                 return false;
             }
@@ -201,6 +203,7 @@ public class Controller implements Initializable {
                 System.out.println("Titles table already contains DateCreated");
             }
             else {
+                Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                 sqlExcept.printStackTrace();
                 return false;
             }
@@ -215,6 +218,7 @@ public class Controller implements Initializable {
                 System.out.println("Customer table already contains Delinqunt");
             }
             else {
+                Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                 sqlExcept.printStackTrace();
                 return false;
             }
@@ -257,6 +261,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
         return pendingIssueRequest;
@@ -373,6 +378,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 
@@ -405,6 +411,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 
@@ -440,6 +447,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 
@@ -476,6 +484,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 
@@ -508,6 +517,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 
@@ -535,6 +545,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 
@@ -570,6 +581,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 
@@ -603,6 +615,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 
@@ -687,6 +700,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 
@@ -745,6 +759,7 @@ public class Controller implements Initializable {
                         results.close();
                         s.close();
                     } catch (SQLException e) {
+                        Log.LogEvent("SQL Exception", e.getMessage());
                         e.printStackTrace();
                     }
                     this.unsaved = true;
@@ -787,6 +802,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 
@@ -1298,6 +1314,7 @@ public class Controller implements Initializable {
                         Log.LogEvent("Customer Deleted", "Deleted Customer - " + customer.getFirstName() + " " + customer.getLastName());
 
                     } catch (SQLException sqlExcept) {
+                        Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                         System.err.println("Error deleting customer");
                         sqlExcept.printStackTrace();
                     }
@@ -1378,6 +1395,7 @@ public class Controller implements Initializable {
 
                         Log.LogEvent("Deleted Order", "Deleted order - CustomerID: " + customerId + " - Title: " + order.getTitleName() + " - Quantity: " + quantity + " - Issue: " + Integer.valueOf(issue));
                     } catch (SQLException sqlExcept) {
+                        Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                         sqlExcept.printStackTrace();
                     }
 
@@ -1477,6 +1495,7 @@ public class Controller implements Initializable {
 
                         Log.LogEvent("Deleted Title", "Deleted Title - Title: " + title.getTitle() + " - TitleID: " + titleId);
                     } catch (SQLException sqlExcept) {
+                        Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                         sqlExcept.printStackTrace();
                     }
                 }
@@ -1670,6 +1689,7 @@ public class Controller implements Initializable {
                 NewOrderController newOrderController = fxmlLoader.getController();
                 newOrderController.setConnection(conn);
                 newOrderController.setCustomerID(customerTable.getSelectionModel().getSelectedItem().getId());
+                newOrderController.setCustomer(customerTable.getSelectionModel().getSelectedItem().getFullName());
                 newOrderController.populate(this.getTitles());
                 newOrderController.setNewOrder();
 
@@ -1922,6 +1942,7 @@ public class Controller implements Initializable {
             }
             catch (SQLException sqlExcept)
             {
+                Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Database Error. Report may not have saved successfully", ButtonType.OK);
                 alert.setTitle("Database Error");
                 alert.show();
@@ -2029,6 +2050,7 @@ public class Controller implements Initializable {
             }
             catch (SQLException sqlExcept)
             {
+                Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Database Error. Report may not have saved successfully", ButtonType.OK);
                 alert.setTitle("Database Error");
                 alert.show();
@@ -2292,6 +2314,7 @@ public class Controller implements Initializable {
             }
             catch (SQLException sqlExcept)
             {
+                Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Database Error. Report may not have saved successfully", ButtonType.OK);
                 alert.setTitle("Database Error");
                 alert.show();
@@ -2427,6 +2450,7 @@ public class Controller implements Initializable {
             }
             catch (SQLException sqlExcept)
             {
+                Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Database Error. Report may not have saved successfully", ButtonType.OK);
                 alert.setTitle("Database Error");
                 alert.show();
@@ -2651,6 +2675,7 @@ public class Controller implements Initializable {
                         s.executeUpdate();
                         s.close();
                     } catch (SQLException sqlExcept) {
+                        Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                         sqlExcept.printStackTrace();
                     }
                     titleTable.getItems().setAll(getTitles());
@@ -2685,6 +2710,7 @@ public class Controller implements Initializable {
             s.executeUpdate();
             s.close();
         } catch (SQLException sqlExcept) {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
         invalidateTitles();
@@ -2708,6 +2734,7 @@ public class Controller implements Initializable {
             s.executeUpdate();
             s.close();
         } catch (SQLException sqlExcept) {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
         invalidateTitles();
@@ -2904,6 +2931,7 @@ public class Controller implements Initializable {
             s.executeUpdate();
             s.close();
         } catch (SQLException sqlExcept) {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 
@@ -2970,6 +2998,7 @@ public class Controller implements Initializable {
                     alert.show();
                 }
             } else {
+                Log.LogEvent("SQL Exception", e.getMessage());
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Database error. This is either a bug, or you messed with the database folder.", ButtonType.OK);
                 alert.setTitle("Database Error");
                 alert.setHeaderText("");
@@ -3161,6 +3190,7 @@ public class Controller implements Initializable {
 
             Log.LogEvent("Export A Single Title Report", "Exported Title: " + title.getTitle());
         } catch (SQLException e) {
+            Log.LogEvent("SQL Exception", e.getMessage());
             Alert alert = new Alert(Alert.AlertType.ERROR, "Database Error. Report may not have saved successfully", ButtonType.OK);
             alert.setTitle("Database Error");
             alert.show();
@@ -3417,6 +3447,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
     }
@@ -3452,6 +3483,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
     }
@@ -3503,6 +3535,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
     }
@@ -3551,6 +3584,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 
@@ -3585,6 +3619,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 
@@ -3619,6 +3654,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 
@@ -3650,6 +3686,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 
@@ -3681,6 +3718,7 @@ public class Controller implements Initializable {
         }
         catch (SQLException sqlExcept)
         {
+            Log.LogEvent("SQL Exception", sqlExcept.getMessage());
             sqlExcept.printStackTrace();
         }
 

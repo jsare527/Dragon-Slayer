@@ -80,9 +80,9 @@ public class NewTitleController{
                 rowsAffected = insert.executeUpdate();
 
                 insert.close();
-
-                Log.LogEvent("Edited Title", "Edited Title - Title: " + title + " - Price: " + price + " - Notes: " + notes + " - Product ID: " + productId + " - Date Created: " + dateCreated);
+                Log.LogEvent("Added Title", "Added Title - Title: " + title + " - Price: " + price + " - Notes: " + notes + " - Product ID: " + productId + " - Date Created: " + dateCreated);
             } catch (SQLException sqlExcept) {
+                Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                 Alert alert = new Alert(Alert.AlertType.ERROR, "Database error. This is either a bug, or you messed with the DragonSlayer/derbyDB folder.", ButtonType.OK);
                 alert.setTitle("Database Error");
                 alert.setHeaderText("");
@@ -115,7 +115,7 @@ public class NewTitleController{
      * @return An integer representing the number of cents
      */
     private String dollarsToCents(String priceDollars) {
-        if (priceDollars == "") {
+        if (priceDollars.isBlank()) {
             return null;
         }
         priceDollars = priceDollars.replace(".", "");
