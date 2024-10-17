@@ -19,6 +19,7 @@ The DragonSlayer program is used to maintain a comic book store Pull List. Custo
 # Release Notes - Dragon Slayer V4
 
 **RELEASE NOTES 3.01**
+
 *Code Milestone 1 (10.17.2024)*
   - Repository set up
   - plans to fix following bugs:
