@@ -16,6 +16,23 @@ The DragonSlayer program is used to maintain a comic book store Pull List. Custo
 **mainV2 branch:**
 - This is the branch which holds the DragonSlayerV2 code.
 
+# Release Notes - Dragon Slayer V4
+
+**RELEASE NOTES 3.01**
+
+*Code Milestone 1 (10.17.2024)*
+  - Repository set up
+  - plans to fix following bugs:
+      - removing flags not working
+      - fix search button
+      - add type to search feature within requested user items**
+
+*Code Milestone 2 (11.02.2024)*
+
+*Code Milestone 3 (11.27.2024)*
+
+*Code Milestone 4 (12.07.2024)*
+
 # Release Notes - Dragon Slayer V3
 
 **RELEASE NOTES 2.01**
