@@ -27,6 +27,10 @@ The DragonSlayer program is used to maintain a comic book store Pull List. Custo
       - fix search button
       - add type to search feature within requested user items**
 
+  *Code Milestone 2 (11.02.2024)*
+  *Code Milestone 3 (11.27.2024)*
+  *Code Milestone 4 (12.07.2024)*
+
 # Release Notes - Dragon Slayer V3
 
 **RELEASE NOTES 2.01**
