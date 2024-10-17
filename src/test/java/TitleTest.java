@@ -65,7 +65,7 @@ public class TitleTest extends ApplicationTest {
             release(KeyCode.ENTER);
         }
         catch(Exception e){};
-        clickOn("#deleteCustomerButton");
+        clickOn("#deleteTitleButton");
         clickOn("#yesButton");
     }
 
