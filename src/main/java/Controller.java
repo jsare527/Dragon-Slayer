@@ -3,6 +3,8 @@
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -74,6 +76,7 @@ public class Controller implements Initializable {
     @FXML private TableColumn<Title, String> titlePriceColumn;
     @FXML private TableColumn<Title, String> titleDateCreatedColumn;
     @FXML private TableColumn<Title, String> titleNotesColumn;
+    @FXML private TextField titleSearch;
 
     @FXML private TableView<Order> customerOrderTable;
     @FXML private TableColumn<Order, String> customerOrderReqItemsColumn;
@@ -2819,41 +2822,74 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    void handleTitleSearching(KeyEvent event)
-    {
-        Scene scene = titleTable.getScene();
-        String search = ((TextField)scene.lookup("#TitleSearch")).getText().toLowerCase();
+    void handleTitleSearching(KeyEvent event) {
+        FilteredList<Title> filteredList = new FilteredList<>(titleTable.getItems(), p -> true);
+        // listens for changes to the textfield for title searching
+        titleSearch.textProperty().addListener((observable, oldValue, newValue) -> {
+            // set predicate for filtering
+            filteredList.setPredicate(title -> {
+                if (newValue.isEmpty() || newValue.isBlank() || newValue == null) {
+                    return true;
+                }
 
-        if (search.equals("") || search == null)
-        {
-            titleTable.getItems().setAll(getTitles());
-        }
+                // the value to search for
+                String search = newValue.toLowerCase();
 
-        ObservableList<Title> titles = null;
-        if (event.getCode() == KeyCode.BACK_SPACE)
-        {
-            titles = getTitles();
-        }
-        else 
-        {
-            titles = titleTable.getItems().sorted(Comparator.comparing(Title::getTitle, String.CASE_INSENSITIVE_ORDER));
-        }
+                if (title.getProductId() != null && title.getProductId().toLowerCase().contains(search)) {
+                    return true;
+                } else if (title.getTitle().toLowerCase().contains(search)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            });
+        });
 
-        ObservableList<Title> sortedTitles = FXCollections.observableArrayList();
+        SortedList<Title> sortedList = new SortedList<>(filteredList);
 
-        for (Title title : titles) {
-            if (title.getProductId() != null && title.getProductId().toLowerCase().contains(search))
-            {
-                sortedTitles.add(title);
-            }
-            else if (title.getTitle().toLowerCase().contains(search))
-            {
-                sortedTitles.add(title);
-            }
-        }
-
-        titleTable.getItems().setAll(sortedTitles);
+        sortedList.comparatorProperty().bind(titleTable.comparatorProperty());
+        // set items in title table to sorted items, and scroll to the top.
+        titleTable.setItems(sortedList);
+        titleTable.scrollTo(0);
     }
+
+//    @FXML
+//    void handleTitleSearching(KeyEvent event)
+//    {
+//        titleTable.refresh();
+//        Scene scene = titleTable.getScene();
+//        String search = ((TextField)scene.lookup("#TitleSearch")).getText().toLowerCase();
+//
+//        if (search.equals("") || search == null)
+//        {
+//            titleTable.getItems().setAll(getTitles());
+//        }
+//
+//        ObservableList<Title> titles = null;
+//        if (event.getCode() == KeyCode.BACK_SPACE)
+//        {
+//            titles = getTitles();
+//        }
+//        else
+//        {
+//            titles = titleTable.getItems().sorted(Comparator.comparing(Title::getTitle, String.CASE_INSENSITIVE_ORDER));
+//        }
+//
+//        ObservableList<Title> sortedTitles = FXCollections.observableArrayList();
+//
+//        for (Title title : titles) {
+//            if (title.getProductId() != null && title.getProductId().toLowerCase().contains(search))
+//            {
+//                sortedTitles.add(title);
+//            }
+//            else if (title.getTitle().toLowerCase().contains(search))
+//            {
+//                sortedTitles.add(title);
+//            }
+//        }
+//
+//        titleTable.getItems().setAll(sortedTitles);
+//    }
 
     @FXML
         //Bibash method is called which searches through the list
