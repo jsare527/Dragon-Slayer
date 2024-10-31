@@ -28,6 +28,8 @@ The DragonSlayer program is used to maintain a comic book store Pull List. Custo
       - add type to search feature within requested user items**
 
 *Code Milestone 2 (11.02.2024)*
+  - (10.31.2024) commits made to add new function for searching titles
+      - fixes the scrollbar bug that occured when searching
 
 *Code Milestone 3 (11.27.2024)*
 
