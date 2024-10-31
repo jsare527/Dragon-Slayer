@@ -1,6 +1,8 @@
 //import org.apache.poi.ss.formula.functions.T;
 
+import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -30,6 +32,8 @@ import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.zeroturnaround.zip.ZipUtil;
 
+import javax.swing.event.ChangeEvent;
+import javafx.beans.value.ChangeListener;
 import java.io.*;
 import java.net.URL;
 import java.sql.Date;
@@ -2822,34 +2826,47 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    void handleTitleSearching(KeyEvent event) {
+    void handleTitleSearching() {
         FilteredList<Title> filteredList = new FilteredList<>(titleTable.getItems(), p -> true);
-        // listens for changes to the textfield for title searching
-        titleSearch.textProperty().addListener((observable, oldValue, newValue) -> {
-            // set predicate for filtering
-            filteredList.setPredicate(title -> {
-                if (newValue.isEmpty() || newValue.isBlank() || newValue == null) {
-                    return true;
-                }
-
-                // the value to search for
-                String search = newValue.toLowerCase();
-
-                if (title.getProductId() != null && title.getProductId().toLowerCase().contains(search)) {
-                    return true;
-                } else if (title.getTitle().toLowerCase().contains(search)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
-        });
-
         SortedList<Title> sortedList = new SortedList<>(filteredList);
-
         sortedList.comparatorProperty().bind(titleTable.comparatorProperty());
-        // set items in title table to sorted items, and scroll to the top.
+
         titleTable.setItems(sortedList);
+
+        final long debounceDelay = 300;
+        final ChangeListener<String> searchListener = new ChangeListener<>() {
+            private Thread debounceThread;
+
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                if (debounceThread != null && debounceThread.isAlive()) debounceThread.interrupt();
+                debounceThread = new Thread(() -> {
+                   try {
+                       Thread.sleep(debounceDelay);
+                       Platform.runLater(() -> applyFilter(filteredList, newValue));
+                   } catch (InterruptedException ignored) {}
+                });
+                debounceThread.start();
+            }
+        };
+        titleSearch.textProperty().addListener(searchListener);
+    }
+
+    private void applyFilter(FilteredList<Title> filteredList, String filterText) {
+        filteredList.setPredicate(title -> {
+            if (filterText == null || filterText.isEmpty()) {
+                return true;
+            }
+
+            String search = filterText.toLowerCase();
+            if (title.getProductId() != null && title.getProductId().toLowerCase().contains(search)) {
+                return true;
+            } else if (title.getTitle().toLowerCase().contains(search)) {
+                return true;
+            } else {
+                return false;
+            }
+        });
         titleTable.scrollTo(0);
     }
 
