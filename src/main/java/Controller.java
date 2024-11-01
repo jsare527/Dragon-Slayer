@@ -2828,10 +2828,7 @@ public class Controller implements Initializable {
     @FXML
     void handleTitleSearching() {
         FilteredList<Title> filteredList = new FilteredList<>(titleTable.getItems(), p -> true);
-        SortedList<Title> sortedList = new SortedList<>(filteredList);
-        sortedList.comparatorProperty().bind(titleTable.comparatorProperty());
-
-        titleTable.setItems(sortedList);
+        titleTable.setItems(filteredList);
 
         final long debounceDelay = 300;
         final ChangeListener<String> searchListener = new ChangeListener<>() {
@@ -2868,6 +2865,7 @@ public class Controller implements Initializable {
             }
         });
         titleTable.scrollTo(0);
+        titleTable.refresh();
     }
 
 //    @FXML
