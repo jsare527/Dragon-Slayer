@@ -2685,10 +2685,20 @@ public class Controller implements Initializable {
                         Log.LogEvent("SQL Exception", sqlExcept.getMessage());
                         sqlExcept.printStackTrace();
                     }
+                    titleTable.getItems().setAll(getTitles());                   
+                    invalidateTitles();
                     titleTable.getItems().setAll(getTitles());
+                    invalidateTitles();
                     this.loadReportsTab();
+                                     
+                  
                 });
+        
+        getDatabaseInfo();
+        
         this.unsaved = false;
+        
+        
 
         Log.LogMessage("Flags Reset");
     }
