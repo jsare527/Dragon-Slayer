@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
@@ -910,6 +911,12 @@ public class Controller implements Initializable {
                 }
             }
         });
+
+        for (TableColumn<?, ?> column : titleTable.getColumns()) {
+            column.sortTypeProperty().addListener((obs, oldVal, newVal) -> {
+                titleTable.refresh();
+            });
+        }
 
         //Populate columns for flagged titles table in New Week Pulls Tab
         flaggedTitleColumn.setCellValueFactory(new PropertyValueFactory<>("flaggedTitleName"));
