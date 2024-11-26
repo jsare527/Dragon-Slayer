@@ -902,21 +902,22 @@ public class Controller implements Initializable {
         titleTable.getSortOrder().add(titleTitleColumn);
         titleTable.setRowFactory(title -> new TableRow<Title>() {
             @Override
-            public void updateItem(Title t, boolean noRequests) {
+            public void updateItem(Title t, boolean empty) {
+                super.updateItem(t, empty);
                 //int numRequests = t == null ? 100 : getNumberRequests(t.getId());
                 if (t == null || !t.getNoRequest()) {
                     setStyle("");
                 } else {
                     setStyle("-fx-background-color: #f2e88a;");
                 }
+//                LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
+//                if (t != null) {
+//                    if (t.getDateFlagged() == null || t.getDateFlagged().isBefore(sixMonthsAgo)) {
+//                        setStyle("-fx-background-color: #a83333;");
+//                    }
+//                }
             }
         });
-
-        for (TableColumn<?, ?> column : titleTable.getColumns()) {
-            column.sortTypeProperty().addListener((obs, oldVal, newVal) -> {
-                titleTable.refresh();
-            });
-        }
 
         //Populate columns for flagged titles table in New Week Pulls Tab
         flaggedTitleColumn.setCellValueFactory(new PropertyValueFactory<>("flaggedTitleName"));
@@ -2845,7 +2846,9 @@ public class Controller implements Initializable {
     @FXML
     void handleTitleSearching() {
         FilteredList<Title> filteredList = new FilteredList<>(titleTable.getItems(), p -> true);
-        titleTable.setItems(filteredList);
+        SortedList<Title> sortedList = new SortedList<>(filteredList);
+        sortedList.comparatorProperty().bind(titleTable.comparatorProperty());
+        titleTable.setItems(sortedList);
 
         final long debounceDelay = 300;
         final ChangeListener<String> searchListener = new ChangeListener<>() {
