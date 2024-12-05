@@ -25,6 +25,10 @@
     -fx-fill-text: "#ffffff";
 }
 
+.table-row-cell{
+-fx-border-color: "#000000";
+-fx-table-cell-border-color:"#000000";}
+
 "#ffffff"
 "#eeeeee"
 "#bcbcbc"
