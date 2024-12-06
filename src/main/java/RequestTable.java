@@ -3,8 +3,8 @@
  */
 public class RequestTable {
 
-    private String requestLastName;
-    private String requestFirstName;
+    private final String requestLastName;
+    private final String requestFirstName;
     private int requestQuantity;
     private int requestIssue;
 

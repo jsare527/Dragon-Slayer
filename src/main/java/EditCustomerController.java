@@ -7,6 +7,7 @@ import javafx.util.converter.DefaultStringConverter;
 
 import java.net.URL;
 import java.sql.*;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -78,7 +79,7 @@ public class EditCustomerController implements Initializable {
                     String testPhone = result.getString("PHONE");
                     String testEmail = result.getString("EMAIL");
                     String testNotes = result.getString("NOTES");
-                    if (testPhone.equals(phone) && testEmail.equals(email) && (testNotes == null ? notes == null : testNotes.equals(notes))) {
+                    if (testPhone.equals(phone) && testEmail.equals(email) && (Objects.equals(testNotes, notes))) {
                         Alert alert = new Alert(Alert.AlertType.WARNING, "Cannot create duplicate Customers. If two Customers have the exact same name, make sure they have different phones or emails.", ButtonType.OK);
                         alert.setTitle("Duplicate Customer Entry");
                         alert.setHeaderText("");

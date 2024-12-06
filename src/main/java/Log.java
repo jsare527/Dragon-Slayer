@@ -19,8 +19,8 @@ public final class Log
 
     public static final boolean printDebugInfo = true;
 
-    private Log() { /* This class is static and must not be instantiated */ };
-    
+    private Log() { /* This class is static and must not be instantiated */ }
+
     /**
      * Saves a specific message to the log file.
      * @param message The message to be saved.

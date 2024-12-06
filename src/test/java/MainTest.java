@@ -56,7 +56,7 @@ public class MainTest extends ApplicationTest {
         try{
             clickOn("Ample");
         }
-        catch(Exception e){};
+        catch(Exception e){}
         clickOn("#deleteCustomerButton");
         clickOn("#yesButton");
     }
@@ -158,7 +158,7 @@ public class MainTest extends ApplicationTest {
         for (Order order : a) {
             if (order.getCustomerId() == example.getId()) total++;
         }
-        assertTrue(total == 1);
+        assertEquals(1, total);
 
         clickOn("Ample");
         press(KeyCode.TAB);
@@ -174,7 +174,7 @@ public class MainTest extends ApplicationTest {
             if (order.getCustomerId() == example.getId()) total++;
         }
         System.out.println(total);
-        assertTrue(total == 0);
+        assertEquals(0, total);
 
     }
 
@@ -220,7 +220,7 @@ public class MainTest extends ApplicationTest {
         for (Order order : b) {
             if (order.getCustomerId() == example.getId()) total++;
         }
-        assertTrue(total == 0);
+        assertEquals(0, total);
 
         clickOn("#deleteCustomerButton");
         clickOn("#yesButton");

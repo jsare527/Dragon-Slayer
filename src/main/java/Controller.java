@@ -51,14 +51,14 @@ public class Controller implements Initializable {
 //////////////////////////// Class Variables ////////////////////////////
 /######################################################################*/
 
-    // Path to txt file saving last DB location. Reccommended to leave with program
+    // Path to txt file saving last DB location. Recommended to leave with program
     private final String LAST_DB_LOCATION_FILE_PATH = "lastDBconnection.txt";
 
     //Bibash enumeration type
     public enum CURRENT_PAGE {
         TITLE,
-        CUSTOMER  ;
-    };
+        CUSTOMER
+    }
 
     public CURRENT_PAGE currentPage;
 
@@ -223,7 +223,7 @@ public class Controller implements Initializable {
             s.execute(sql);
         } catch (SQLException sqlExcept) {
             if (sqlExcept.getSQLState().equals("X0Y32")) {
-                System.out.println("Customer table already contains Delinqunt");
+                System.out.println("Customer table already contains delinquent");
             }
             else {
                 Log.LogEvent("SQL Exception", sqlExcept.getMessage());
@@ -242,7 +242,7 @@ public class Controller implements Initializable {
     //#region Getters and Setters
 
     /**
-     * Searches the database for whether or not the given title has any pending issue requests
+     * Searches the database for whether the given title has any pending issue requests
      * @param titleId the ID of the title to search for
      * @return True is the title has any pending issue requests, false otherwise
      */
@@ -250,12 +250,13 @@ public class Controller implements Initializable {
         boolean pendingIssueRequest = false;
         ResultSet result;
         Statement s = null;
+        Integer objectInt = Integer.valueOf(titleId);
         try
         {
             String sql = String.format("""
                     SELECT COUNT(*) FROM ORDERS
                     WHERE ISSUE IS NOT NULL AND TITLEID=%s
-                    """, titleId);
+                    """, objectInt);
 
             s = conn.createStatement();
             result = s.executeQuery(sql);
@@ -278,7 +279,7 @@ public class Controller implements Initializable {
     /**
      * Returns true or false based on if there are unsaved changes to New
      * Release Flags or not.
-     * @return A boolean for whether or not there are unsaved changes
+     * @return A boolean for whether there are unsaved changes
      */
     public boolean isUnsaved() {
         return unsaved;
@@ -314,11 +315,22 @@ public class Controller implements Initializable {
      */
     private void getDatabaseInfo() {
         int numTitles = titleTable.getItems().size();
+        Integer objNumTitles = Integer.valueOf(titleTable.getItems().size());
+
         int numCustomers = customerTable.getItems().size();
+        Integer objNumCustomers = Integer.valueOf(customerTable.getItems().size());
+
         int specialOrderNotes = 0;
+        Integer objOrderNotes = Integer.valueOf(0);
+
         int issueNumberRequests = getNumIssueRequests();
+        Integer objNumRequests = Integer.valueOf(getNumIssueRequests());
+
         int titlesNotFlagged = 0;
+        Integer objNotFlagged = Integer.valueOf(0);
+
         int titlesNoRequests = getNumTitlesNoRequests();
+        Integer objNoRequests = Integer.valueOf(getNumTitlesNoRequests());
 
         LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
         for (Title title : titleTable.getItems()) {
@@ -342,12 +354,12 @@ public class Controller implements Initializable {
                    %s Pending Issue # Requests
                    %s Titles have not been flagged for over six months
                    %s Titles have 0 Customer Requests
-                """, numTitles, numCustomers, specialOrderNotes, issueNumberRequests, titlesNotFlagged, titlesNoRequests));
+                """, objNumTitles, objNumCustomers, objOrderNotes, objNumRequests, objNotFlagged, objNoRequests));
     }
 
     /**
-     * Gets all of the flagged titles and related information to fill the Flagged Table
-     * @return an obeservable lsit of FlaggedTable object with the requested data
+     * Gets all the flagged titles and related information to fill the Flagged Table
+     * @return an observable list of FlaggedTable object with the requested data
      */
     public ObservableList<FlaggedTable> getFlaggedTitles() {
 
@@ -718,7 +730,7 @@ public class Controller implements Initializable {
     /**
      * Gets a list representing all Titles in the database.
      * If any operations adjust the database for titles, invalidateOrders() should be called.
-     * @return An ObeservableList of all Title objects
+     * @return An ObservableList of all Title objects
      */
     public ObservableList<Title> getTitles() {
 
@@ -823,10 +835,10 @@ public class Controller implements Initializable {
 ///////////////////////////// Initialization ////////////////////////////
 /######################################################################*/
 
-    //#region Initalization
+    //#region Initialization
 
     /**
-     * Initiializes the state of the application. Creates a connection to the database,
+     * Initializes the state of the application. Creates a connection to the database,
      * loads all Customer, Title, and Order data, populates all tables, and creates
      * listeners.
      * @param location
@@ -904,18 +916,28 @@ public class Controller implements Initializable {
             @Override
             public void updateItem(Title t, boolean empty) {
                 super.updateItem(t, empty);
+                LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
+                titleTable.refresh();
                 //int numRequests = t == null ? 100 : getNumberRequests(t.getId());
-                if (t == null || !t.getNoRequest()) {
+                if (t == null) {
                     setStyle("");
-                } else {
-                    setStyle("-fx-background-color: #f2e88a;");
                 }
-//                LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
-//                if (t != null) {
-//                    if (t.getDateFlagged() == null || t.getDateFlagged().isBefore(sixMonthsAgo)) {
-//                        setStyle("-fx-background-color: #a83333;");
-//                    }
-//                }
+                else {
+                    if (t.getDateFlagged() != null) {
+                        if (t.getDateFlagged().isBefore(sixMonthsAgo) && t.getNoRequest()) {
+                            setStyle("-fx-background-color: #e542eb;");
+                        }
+                        else if (t.getNoRequest()) {
+                            setStyle("-fx-background-color: #f2e88a;");
+                        }
+                        else if (t.getDateFlagged().isBefore(sixMonthsAgo)) {
+                            setStyle("-fx-background-color: #ff7f7f;");
+                        }
+                        else {
+                            setStyle("");
+                        }
+                    }
+                }
             }
         });
 
@@ -991,11 +1013,7 @@ public class Controller implements Initializable {
                     customerEmailText.setText(newSelection.getEmail());
                     customerNotesText.setText(newSelection.getNotes());
 
-                    if(newSelection.getDelinquent())
-                    {
-                        delinqNoticeText.setVisible(true);
-                    }
-                    else delinqNoticeText.setVisible(false);
+                    delinqNoticeText.setVisible(newSelection.getDelinquent());
 
                     newOrderButton.setDisable(false);
                     editOrderButton.setDisable(false);
@@ -1079,12 +1097,7 @@ public class Controller implements Initializable {
 
                     if (newSelection.getDateFlagged() != null) {
                         titleDateFlagged.setText(newSelection.getDateFlagged().toString());
-                        if (newSelection.getDateFlagged().isBefore(sixMonthsAgo) && (newSelection.getDateCreated() == null || newSelection.getDateCreated().isBefore(sixMonthsAgo))) {
-                            titleDateFlaggedNoticeText.setVisible(true);
-                        }
-                        else {
-                            titleDateFlaggedNoticeText.setVisible(false);
-                        }
+                        titleDateFlaggedNoticeText.setVisible(newSelection.getDateFlagged().isBefore(sixMonthsAgo) && (newSelection.getDateCreated() == null || newSelection.getDateCreated().isBefore(sixMonthsAgo)));
                     }
                     else if (newSelection.getDateCreated() != null && newSelection.getDateCreated().isAfter(sixMonthsAgo)) {
                         titleDateFlaggedNoticeText.setVisible(false);
@@ -1434,7 +1447,7 @@ public class Controller implements Initializable {
 
     /**
      * Runs when the Delete Title button is pressed. Creates a dialog for the
-     * user to confirm deletion of the selected Title. It also deletes evry order
+     * user to confirm deletion of the selected Title. It also deletes every order
      * linked to this title. Re-renders the Title and Order table on window close.
      * @param event Event that triggered the method call.
      */
@@ -2074,7 +2087,7 @@ public class Controller implements Initializable {
     }
 
     /**
-     * Creates a report to export all of the flagged titles, in the same format as the All Requests by Title report
+     * Creates a report to export all the flagged titles, in the same format as the All Requests by Title report
      */
     @FXML
     void handleExportFlaggedTitles(ActionEvent event) {
@@ -2338,7 +2351,7 @@ public class Controller implements Initializable {
     }
 
     /**
-     * Creates a Excel report for a single Customer. Gets all available requests for the customer and writes them
+     * Creates an Excel report for a single Customer. Gets all available requests for the customer and writes them
      * to an Excel spreadsheet.
      */
     @FXML
@@ -2765,7 +2778,7 @@ public class Controller implements Initializable {
         invalidateTitles();
         this.loadReportsTab();
         getDatabaseInfo();
-        Log.LogEvent("Remove Save Flag", title.getTitle() + " has been UNflagged and saved!");
+        Log.LogEvent("Remove Save Flag", title.getTitle() + " has been Unflagged and saved!");
     }
 
     @FXML
@@ -2878,11 +2891,7 @@ public class Controller implements Initializable {
             String search = filterText.toLowerCase();
             if (title.getProductId() != null && title.getProductId().toLowerCase().contains(search)) {
                 return true;
-            } else if (title.getTitle().toLowerCase().contains(search)) {
-                return true;
-            } else {
-                return false;
-            }
+            } else return title.getTitle().toLowerCase().contains(search);
         });
         titleTable.scrollTo(0);
         titleTable.refresh();
@@ -2984,7 +2993,7 @@ public class Controller implements Initializable {
         Integer customerID = customerTable.getSelectionModel().getSelectedItem().getId();
         PreparedStatement s = null;
         String sql;
-        if (currentStatus == false)
+        if (!currentStatus)
             sql = """
             UPDATE Customers
             SET DELINQUENT = TRUE
@@ -3392,14 +3401,14 @@ public class Controller implements Initializable {
                     {
                         if (order.getIssue() == testUnique.getIssue())
                         {
-                            // A existing matching order was found, increment the quantity of that order and ignroe the current order
+                            // An existing matching order was found, increment the quantity of that order and ignore the current order
                             testUnique.setQuantity(testUnique.getQuantity() + 1);
                             foundMatch = true;
                             break;
                         }
                     }
 
-                    // If no matching order was found, this is a order for the given title with a unique issue number
+                    // If no matching order was found, this is an order for the given title with a unique issue number
                     if (!foundMatch)
                         ordersForTitle.add(order);
                 }
@@ -3422,7 +3431,7 @@ public class Controller implements Initializable {
 
         Hashtable<String, ArrayList<RequestTable>> uniqueRequests = new Hashtable<>();
         
-        // Get all the requsts for every selected title
+        // Get all the requests for every selected title
         for (Title title: titles)
         {
             allRequests.addAll(getRequests(title.getId(), -9));
@@ -3864,6 +3873,6 @@ public class Controller implements Initializable {
         s.execute("DELETE FROM Customers");
         s.execute("DELETE FROM Titles");
         conn.commit();
-        s.close();;
+        s.close();
     }
 }

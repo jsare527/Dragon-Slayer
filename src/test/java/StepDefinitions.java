@@ -54,7 +54,7 @@ public class StepDefinitions extends ApplicationTest {
     @Given("Customers$")
     public void customers(DataTable args) throws SQLException
     {
-        ArrayList<Customer> customers = (ArrayList<Customer>) createCustomerList(args);
+        ArrayList<Customer> customers = createCustomerList(args);
         controller.addCustomers(customers);
     }
 
@@ -249,7 +249,7 @@ public class StepDefinitions extends ApplicationTest {
     @Given("Titles$")
     public void titles(DataTable args) throws SQLException
     {
-        ArrayList<Title> titles = (ArrayList<Title>) createTitleList(args);
+        ArrayList<Title> titles = createTitleList(args);
         controller.addTitles(titles);
     }
 

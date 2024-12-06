@@ -42,7 +42,7 @@ public class EditOrderController {
     private String prevQuantity;
 
     private ObservableList<Title> titles  = FXCollections.observableArrayList();
-    private ObservableList<String> titlesStr  = FXCollections.observableArrayList();
+    private final ObservableList<String> titlesStr  = FXCollections.observableArrayList();
 
     /**
      * Updates the title based on the text entered in the text fields.

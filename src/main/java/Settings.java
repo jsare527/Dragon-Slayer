@@ -16,8 +16,8 @@ public class Settings {
     // default config Pairs (Key = Setting, Value = Setting value), add new settings here
     private final Pair<String, String> DEFAULT_DB_LOCATION = new Pair<String, String>("dbLocation", System.getProperty("user.home") + "/DragonSlayer/derbyDB");
 
-    private File settingsFile;
-    private ArrayList<Pair<String, String>> rulePairs = new ArrayList<Pair<String, String>>();
+    private final File settingsFile;
+    private final ArrayList<Pair<String, String>> rulePairs = new ArrayList<Pair<String, String>>();
 
     /**
      * Settings constructor, creates a settings file if needed and parses it

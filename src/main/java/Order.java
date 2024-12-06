@@ -5,11 +5,11 @@
  */
 public class Order {
 
-    private String title;
+    private final String title;
     private int quantity;
-    private int issue;
-    private int customerId;
-    private int titleId;
+    private final int issue;
+    private final int customerId;
+    private final int titleId;
 
 
     /**

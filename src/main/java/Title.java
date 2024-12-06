@@ -15,8 +15,8 @@ public class Title {
     private String notes;
     private String productId;
     private LocalDate dateCreated;
-    private int id;
-    private BooleanProperty flagged;
+    private final int id;
+    private final BooleanProperty flagged;
     private LocalDate dateFlagged;
     private int issueFlagged;
     private boolean noRequest;
@@ -105,10 +105,10 @@ public class Title {
         int dollars = (price / 100);
         int cents = (price % 100);
         if ((cents / 10) == 0) {
-            total = Integer.toString(dollars) + ".0" + Integer.toString(cents);
+            total = dollars + ".0" + cents;
         }
         else {
-            total = Integer.toString(dollars) + '.' + Integer.toString(cents);
+            total = Integer.toString(dollars) + '.' + cents;
         }
         return total;
     }
