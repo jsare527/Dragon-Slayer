@@ -817,6 +817,23 @@ public class Controller implements Initializable {
         return quantity;
     }
 
+    private boolean customerHasRequest(Customer c) {
+        if (c == null) return false;
+        final int customerId = c.getId();
+        try {
+            final String sql = String.format("""
+                    SELECT * FROM ORDERS WHERE customerID = %s
+                    """, customerId);
+            final Statement s = conn.createStatement();
+            final ResultSet rs = s.executeQuery(sql);
+            return rs.next();
+        } catch (SQLException sqlException) {
+            Log.LogEvent("SQL Exception", sqlException.getMessage());
+            sqlException.printStackTrace();
+        }
+        return false;
+    }
+
     //#endregion
 
 /*######################################################################/
@@ -851,6 +868,17 @@ public class Controller implements Initializable {
         customerNotesColumn.setCellValueFactory(new PropertyValueFactory<>("notes"));
         customerTable.getItems().setAll(this.getCustomers());
         customerTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        customerTable.setRowFactory(customer -> new TableRow<>() {
+            @Override
+            public void updateItem(Customer c, boolean empty) {
+                super.updateItem(c, empty);
+                if (!customerHasRequest(c)) {
+                    setStyle("-fx-background-color: #f2e88a;");
+                } else {
+                    setStyle("");
+                }
+            }
+        });
 
 
         // Make Customer Order Table Multi-Selectable
