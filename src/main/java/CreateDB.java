@@ -11,7 +11,7 @@ import java.sql.Statement;
  */
 public class CreateDB {
     static Settings settings = new Settings();
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         new CreateDB().go();
         System.out.println("CreateDB finished.");
         Log.LogEvent("Database Created", "Created a new database at: " + settings.getSetting("dbLocation") + ";create=true");

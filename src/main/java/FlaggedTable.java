@@ -3,12 +3,12 @@
  */
 public class FlaggedTable {
 
-    private String flaggedTitleName;
-    private int flaggedIssueNumber;
-    private int flaggedPriceDollars;
-    private int flaggedQuantity;
-    private int titleId;
-    private int flaggedNumRequests;
+    private final String flaggedTitleName;
+    private final int flaggedIssueNumber;
+    private final int flaggedPriceDollars;
+    private final int flaggedQuantity;
+    private final int titleId;
+    private final int flaggedNumRequests;
 
 
     /**
@@ -62,9 +62,9 @@ public class FlaggedTable {
         int dollars = (flaggedPriceDollars / 100);
         int cents = (flaggedPriceDollars % 100);
         if ((cents / 10) == 0) {
-            total = Integer.toString(dollars) + ".0" + Integer.toString(cents);
+            total = dollars + ".0" + cents;
         }else{
-            total = Integer.toString(dollars) + '.' + Integer.toString(cents);
+            total = Integer.toString(dollars) + '.' + cents;
         }
 
         return total;

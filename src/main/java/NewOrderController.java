@@ -38,7 +38,7 @@ public class NewOrderController implements Initializable{
     @FXML private Text orderQuantityErrorText;
 
     private ObservableList<Title> titles  = FXCollections.observableArrayList();
-    private ObservableList<String> titlesStr  = FXCollections.observableArrayList();
+    private final ObservableList<String> titlesStr  = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -94,7 +94,7 @@ public class NewOrderController implements Initializable{
                     {
                         String testIssue = result.getString("ISSUE");
                         if ((testIssue == null && issue == null) ||
-                            (testIssue != null && issue != null && testIssue.equals(issue)))
+                            (testIssue != null && testIssue.equals(issue)))
                             {
                                 Alert alert = new Alert(Alert.AlertType.WARNING, "Cannot create duplicate Orders. If a customer has ordered multiple issues of the same title, be sure to fill out the issue field.", ButtonType.OK);
                                 alert.setTitle("Duplicate Order");
