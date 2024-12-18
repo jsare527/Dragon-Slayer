@@ -945,8 +945,6 @@ public class Controller implements Initializable {
             public void updateItem(Title t, boolean empty) {
                 super.updateItem(t, empty);
                 LocalDate sixMonthsAgo = LocalDate.now().minusMonths(6);
-                titleTable.refresh();
-                //int numRequests = t == null ? 100 : getNumberRequests(t.getId());
                 if (t == null) {
                     setStyle("");
                 }
