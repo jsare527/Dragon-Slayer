@@ -36,9 +36,12 @@ The DragonSlayer program is used to maintain a comic book store Pull List. Custo
   - Testing added
     
 *Code Milestone 4 (12.07.2024)*
-  - furhter highlights added
+  - further highlights added
   - new button for title interface
   - adjusted to be deployable
+
+*Code Milestone 4 (12.07.2024)*
+  - App deployed into executable form for use
 
 # Release Notes - Dragon Slayer V3
 
