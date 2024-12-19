@@ -33,8 +33,12 @@ The DragonSlayer program is used to maintain a comic book store Pull List. Custo
 
 *Code Milestone 3 (11.27.2024)*
   - added red highlights to determine when a title has not been flagged after 6 months
-  - 
+  - Testing added
+    
 *Code Milestone 4 (12.07.2024)*
+  - furhter highlights added
+  - new button for title interface
+  - adjusted to be deployable
 
 # Release Notes - Dragon Slayer V3
 
